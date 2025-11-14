@@ -1,0 +1,3 @@
+interface removeMe {
+    meh: string;
+}

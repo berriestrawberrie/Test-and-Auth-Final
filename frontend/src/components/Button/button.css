@@ -1,0 +1,19 @@
+.button {
+    border: var(--border);
+    background-color: var(--main-100);
+    place-self: center;
+    padding-inline: 1rem;
+}
+
+.button--large {
+    padding-block: var(--spacing-xxxl);
+    box-shadow: 4px 4px 0 var(--black)
+}
+
+.button__text--medium {
+    font-size: var(--font-size-m);
+}
+
+.button__text--large {
+    font-size: var(--font-size-xl);
+}

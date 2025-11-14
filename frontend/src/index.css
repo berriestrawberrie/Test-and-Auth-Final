@@ -1,0 +1,74 @@
+:root {
+  --main-100: #FFFFFF;
+  --main-200: #EEEEEE;
+  --main-300: #CCCCCC;
+  --white: #FFFFFF;
+  --black: rgb(40, 45, 50);
+
+  --accent1: #97BBEF;
+  --accent2: #FEE69F;
+
+  --color-error: #FF0000;
+  --color-success: #008000;
+  --color-info: #FFB700;
+
+
+  --border: 3px solid var(--black);
+
+  --bread-font: Arial, sans-serif;
+  --title-font: Arial, sans-serif;
+
+
+  --font-size-s: 0.875rem;
+  --font-size-m: 1rem;
+  --font-size-l: 1.25rem;
+  --font-size-xl: 4rem;
+
+
+  --spacing-xs: .25rem;
+  --spacing-s: .5rem;
+  --spacing-m: .75rem;
+  --spacing-l: 1rem;
+  --spacing-xl: 1.5rem;
+  --spacing-xxl: 1.75rem;
+  --spacing-xxxl: 2rem;
+  --spacing-xxxxl: 3rem;
+
+
+  --max-width: 1180px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* outline: 1px solid red; */
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: var(--bread-font);
+  background-color: var(--main-100);
+  color: var(--black);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--title-font);
+}
+
+.wrapper {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100dvh;
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+}
