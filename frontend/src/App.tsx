@@ -1,9 +1,10 @@
+import Header from "./components/Header/Header";
 import RoutesComponent from "./routes/RoutesComponent";
 
 const App: React.FC = () => {
     return (
         <>
-            <header>header</header>
+            <Header />
             <RoutesComponent />
         </>
     );

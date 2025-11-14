@@ -1,0 +1,28 @@
+.header {
+    padding-block: var(--spacing-m);
+    display: flex;
+    justify-content: end;
+}
+
+.header__logout-button {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    place-items: center;
+    background-color: var(--main-300);
+    border: var(--border);
+    border-radius: 10px;
+    padding-inline: var(--spacing-s);
+    padding-block: var(--spacing-xs);
+    transition: background-color .2s ease-in-out;
+}
+
+.header__logout-text {
+    font-size: var(--font-size-m);
+}
+
+@media (pointer: fine) {
+    .header__logout-button:hover {
+        cursor: pointer;
+        background-color: var(--accent2);
+    }
+}
