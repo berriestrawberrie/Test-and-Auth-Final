@@ -1,9 +1,6 @@
 import { create } from "zustand";
-interface UserInterface {
-    firstName: string;
-    lastName: string;
-    email: string;
-}
+import type { UserInterface } from "../interfaces/userInterfaces";
+
 interface UserStore {
     user: UserInterface | null;
     setUser: (user: UserInterface | null | ((prev: UserInterface | null) => UserInterface | null)) => void;
