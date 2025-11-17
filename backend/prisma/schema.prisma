@@ -5,11 +5,45 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int           @id @default(autoincrement())
+  email             String        @unique
+  firstName         String        
+  type              String 
+  lastName          String  
+  personNumber      String        @unique
+  phone             String
+  address           String
+  grades            Grade[]
+  createdAt         DateTime      @default(now())
+}
+
+model Grade {
+  id            Int       @id @default(autoincrement())
+  student       User      @relation(fields: [studentId], references:[id])
+  studentId     Int
+  year          Int
+  date          DateTime
+  course        Course    @relation(fields: [courseId],references:[id])
+  courseId      Int
+
+  //Improves query performance 
+  @@index([studentId])
+  @@index([courseId])
+}
+
+model Course {
+  id          Int       @id  @default(autoincrement())
+  title       String    @unique
+  desc        String 
+  grades      Grade[]
 }
