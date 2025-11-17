@@ -1,10 +1,9 @@
 import "dotenv/config";
-import { PrismaClient } from "../generated/prisma/client";
-const prisma = new PrismaClient();
+import { prisma } from "./client";
 
 async function seed() {
   //INSERT COURSES
-  const courses = await prisma.course.createMany({
+  await prisma.course.createMany({
     data: [
       { title: "Math", desc: "Mathematics course" },
       { title: "Art", desc: "Art and Design course" },
@@ -42,7 +41,7 @@ async function seed() {
   } //END OF STUDENT FOR
 
   //CREATE 2 ADMIN USERS
-  const admins = await prisma.user.createMany({
+  await prisma.user.createMany({
     data: [
       {
         email: "admin1@school.com",
