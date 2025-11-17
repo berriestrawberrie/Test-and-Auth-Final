@@ -1,0 +1,11 @@
+.filter {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin-left: auto;
+}
+
+.filter__buttons {
+  display: flex;
+  gap: 1rem;
+}
