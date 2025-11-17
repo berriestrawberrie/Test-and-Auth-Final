@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import admin from "firebase-admin";
+import { UserRole } from "@prisma/client";
 import { prisma } from "../prisma/client";
 
 export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,15 +29,15 @@ export const verifyAdmin = async (req: Request, res: Response, next: NextFunctio
 
   try {
     const user = await prisma.user.findUnique({
-      where: { email: req.user.email },
-      select: { type: true },
+      where: { id: req.user.uid },
+      select: { role: true },
     });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (user.type === "admin") {
+    if (user.role === UserRole.ADMIN) {
       next();
     } else {
       return res.status(403).json({ message: "Forbidden: Admin access required" });

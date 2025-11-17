@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-
 }
 
 datasource db {
@@ -15,26 +14,31 @@ datasource db {
 }
 
 model User {
-  id                Int           @id @default(autoincrement())
-  email             String        @unique
-  firstName         String        
-  type              String 
-  lastName          String  
-  personNumber      String        @unique
-  phone             String
-  address           String
-  grades            Grade[]
-  createdAt         DateTime      @default(now())
+  id           String   @id
+  email        String   @unique
+  firstName    String
+  lastName     String
+  role         UserRole @default(STUDENT)
+  personNumber String   @unique
+  phone        String
+  address      String
+  grades       Grade[]
+  createdAt    DateTime @default(now())
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
 }
 
 model Grade {
-  id            Int       @id @default(autoincrement())
-  student       User      @relation(fields: [studentId], references:[id])
-  studentId     Int
-  year          Int
-  date          DateTime
-  course        Course    @relation(fields: [courseId],references:[id])
-  courseId      Int
+  id        Int      @id @default(autoincrement())
+  student   User     @relation(fields: [studentId], references: [id])
+  studentId String
+  year      Int
+  date      DateTime
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  Int
 
   //Improves query performance 
   @@index([studentId])
@@ -42,8 +46,8 @@ model Grade {
 }
 
 model Course {
-  id          Int       @id  @default(autoincrement())
-  title       String    @unique
-  desc        String 
-  grades      Grade[]
+  id     Int     @id @default(autoincrement())
+  title  String  @unique
+  desc   String
+  grades Grade[]
 }

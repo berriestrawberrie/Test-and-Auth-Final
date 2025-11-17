@@ -1,9 +1,13 @@
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('STUDENT', 'ADMIN');
+
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
+    "role" "UserRole" NOT NULL DEFAULT 'STUDENT',
     "personNumber" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "address" TEXT NOT NULL,
@@ -15,7 +19,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Grade" (
     "id" SERIAL NOT NULL,
-    "studentId" INTEGER NOT NULL,
+    "studentId" TEXT NOT NULL,
     "year" INTEGER NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "courseId" INTEGER NOT NULL,
