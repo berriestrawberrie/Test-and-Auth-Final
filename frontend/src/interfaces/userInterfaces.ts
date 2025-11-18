@@ -1,10 +1,14 @@
-export interface UserInterface {
+export interface UserInterface extends UserCreationInterface {
+  id: string;
+  role: UserRoleType;
+}
+
+export interface UserCreationInterface {
   firstName: string;
   lastName: string;
   email: string;
-  personNumber: number;
-  telephone: number;
+  personNumber: string;
+  phone: string;
   address: string;
-  role: UserRoleType;
 }
 export type UserRoleType = "STUDENT" | "ADMIN";

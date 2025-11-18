@@ -1,6 +1,7 @@
 import RouteAuthenticator from "../components/RouteAuthenticator/RouteAuthenticator";
 import AdminLandingPage from "../pages/AdminLandingPage/AdminLandingPage";
 import LandingPage from "../pages/LandingPage/LandingPage";
+import RegisterUserPage from "../pages/RegisterUserPage/RegisterUserPage";
 import StudentPage from "../pages/StudentPage/StudentPage";
 import { Route, Routes } from "react-router-dom";
 
@@ -13,6 +14,14 @@ const RoutesComponent = () => {
         element={
           <RouteAuthenticator requiredRole="ADMIN">
             <AdminLandingPage />
+          </RouteAuthenticator>
+        }
+      />
+      <Route
+        path="/admins/register"
+        element={
+          <RouteAuthenticator requiredRole="ADMIN">
+            <RegisterUserPage />
           </RouteAuthenticator>
         }
       />
