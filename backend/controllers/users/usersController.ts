@@ -3,6 +3,7 @@ import admin from "firebase-admin";
 import { firebaseTokenSchema } from "../../schemas/firebaseTokenSchema";
 import { prisma } from "../../prisma/client";
 import z from "zod";
+import { userCreationSchema } from "../../schemas/usersSchema";
 
 // @desc: fetch all available users.
 // @method: GET
@@ -73,11 +74,11 @@ export const loginUser = async (req: Request, res: Response) => {
 // @route /users/register
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { uid, email } = req.user!;
-    if (!email) {
-      return res.status(400).json({ error: "Email is required" });
-    }
-    const { firstName, lastName, personNumber, phone, address } = req.body;
+    const validatedUser = userCreationSchema.safeParse(req.body);
+    if (!validatedUser.success) throw validatedUser.error;
+
+    const { firstName, lastName, personNumber, phone, address, email } = validatedUser.data;
+    const { uid } = req.user!;
 
     const existingUser = await prisma.user.findUnique({
       where: { id: uid },
@@ -90,7 +91,7 @@ export const registerUser = async (req: Request, res: Response) => {
     const user = await prisma.user.create({
       data: {
         id: uid,
-        email: email,
+        email,
         firstName,
         lastName,
         personNumber,

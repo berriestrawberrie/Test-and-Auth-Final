@@ -10,18 +10,13 @@ const RoutesComponent = () => {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route
-        path="/admins"
+        path="/admins/*"
         element={
           <RouteAuthenticator requiredRole="ADMIN">
-            <AdminLandingPage />
-          </RouteAuthenticator>
-        }
-      />
-      <Route
-        path="/admins/register"
-        element={
-          <RouteAuthenticator requiredRole="ADMIN">
-            <RegisterUserPage />
+            <Routes>
+              <Route index element={<AdminLandingPage />} />
+              <Route path="register" element={<RegisterUserPage />} />
+            </Routes>
           </RouteAuthenticator>
         }
       />

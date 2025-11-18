@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase.init";
 import { registerUser } from "../../api/handlers/users/usersHandler";
 import { useNavigate } from "react-router-dom";
+import { userCreationSchema } from "../../schemas/usersSchema";
 
 const FORM_INITIAL_STATE = {
   firstname: "",
@@ -47,21 +48,23 @@ const RegistrationForm = () => {
     let firebaseUser = null;
 
     try {
+      const validatedUser = userCreationSchema.safeParse({
+        firstName: formData.firstname,
+        lastName: formData.lastname,
+        personNumber: formData.personnumber,
+        phone: formData.phone,
+        address: formData.address,
+        email: formData.email,
+      });
+      if (!validatedUser.success) throw validatedUser.error;
+
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       firebaseUser = userCredential.user;
 
       const token = await firebaseUser.getIdToken();
-      await registerUser(
-        {
-          firstName: formData.firstname,
-          lastName: formData.lastname,
-          personNumber: formData.personnumber,
-          phone: formData.phone,
-          address: formData.address,
-          email: formData.email,
-        },
-        token
-      );
+
+      await registerUser(validatedUser.data, token);
+
       setFormData(FORM_INITIAL_STATE);
       navigate("/admins");
     } catch (error: any) {
