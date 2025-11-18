@@ -5,5 +5,6 @@ export interface UserInterface {
   personNumber: number;
   telephone: number;
   address: string;
-  role: "STUDENT" | "ADMIN";
+  role: UserRoleType;
 }
+export type UserRoleType = "STUDENT" | "ADMIN";

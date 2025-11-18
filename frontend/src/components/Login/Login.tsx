@@ -28,10 +28,10 @@ const Login = () => {
       const login = await loginUser(token);
       setUser(login.user);
       if (login.user.role === "ADMIN") {
-        navigate("/admin");
+        navigate("/admins");
         return;
       }
-      navigate(`/student/${login.user.id}`);
+      navigate(`/students/${login.user.id}`);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);

@@ -1,12 +1,22 @@
+import RouteAuthenticator from "../components/RouteAuthenticator/RouteAuthenticator";
+import AdminLandingPage from "../pages/AdminLandingPage/AdminLandingPage";
 import LandingPage from "../pages/LandingPage/LandingPage";
 import { Route, Routes } from "react-router-dom";
 
 const RoutesComponent = () => {
-    return (
-        <Routes>
-            <Route path="/" element={<LandingPage />} />
-        </Routes>
-    );
+  return (
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route
+        path="/admins"
+        element={
+          <RouteAuthenticator requiredRole="ADMIN">
+            <AdminLandingPage />
+          </RouteAuthenticator>
+        }
+      />
+    </Routes>
+  );
 };
 
 export default RoutesComponent;

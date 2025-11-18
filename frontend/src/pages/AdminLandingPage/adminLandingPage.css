@@ -1,0 +1,11 @@
+.admin-button-wrapper {
+    display: grid;
+    max-width: 800px;
+    width: 100%;
+    gap: var(--spacing-xxl);
+    place-self: center;
+}
+
+.admin-button-wrapper button {
+    width: 100%;
+}
