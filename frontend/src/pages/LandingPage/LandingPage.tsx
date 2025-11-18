@@ -1,5 +1,5 @@
 import Login from "../../components/Login/Login";
-import "./landingPage.css";
+import "./LandingPage.css";
 
 interface Props {}
 const LandingPage: React.FC<Props> = () => {
