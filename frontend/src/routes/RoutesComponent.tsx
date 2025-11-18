@@ -1,6 +1,7 @@
 import RouteAuthenticator from "../components/RouteAuthenticator/RouteAuthenticator";
 import AdminLandingPage from "../pages/AdminLandingPage/AdminLandingPage";
 import LandingPage from "../pages/LandingPage/LandingPage";
+import StudentPage from "../pages/StudentPage/StudentPage";
 import { Route, Routes } from "react-router-dom";
 
 const RoutesComponent = () => {
@@ -15,6 +16,7 @@ const RoutesComponent = () => {
           </RouteAuthenticator>
         }
       />
+      <Route path="/student" element={<StudentPage title={"Grades"} />} />
     </Routes>
   );
 };
