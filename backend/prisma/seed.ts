@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { prisma } from "./client";
+import { UserRole } from "@prisma/client";
 
 async function seed() {
   //INSERT COURSES
@@ -15,10 +16,11 @@ async function seed() {
   for (let i = 1; i <= 10; i++) {
     const student = await prisma.user.create({
       data: {
+        id: `student-uid-${i}`,
         email: `student${i}@school.com`,
         firstName: `Student${i}`,
         lastName: `Last${i}`,
-        type: "student",
+        role: UserRole.STUDENT,
         personNumber: `PN${1000 + i}`,
         phone: `+4670000000${i}`,
         address: `Street ${i}, City`,
@@ -44,19 +46,21 @@ async function seed() {
   await prisma.user.createMany({
     data: [
       {
-        email: "admin1@school.com",
+        id: "wJzORbldHYfl5xUtul5o0NJce662",
+        email: "burkgrus@hotmail.com",
         firstName: "Admin1",
         lastName: "Teacher",
-        type: "admin",
+        role: UserRole.ADMIN,
         personNumber: "PN10011",
         phone: "+46700000011",
         address: "Street teacher1, City",
       },
       {
-        email: "admin2@school.com",
+        id: "mIXXxZONilPmVuoTKPrwi4RPL722",
+        email: "grusburk@hotmail.com",
         firstName: "Admin2",
         lastName: "Teacher",
-        type: "admin",
+        role: UserRole.ADMIN,
         personNumber: "PN10012",
         phone: "+46700000012",
         address: "Street teacher2, City",

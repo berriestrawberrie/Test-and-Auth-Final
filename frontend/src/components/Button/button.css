@@ -11,9 +11,22 @@
   transition: background-color 0.2s ease-in-out;
 }
 
+.button--medium {
+  padding-block: var(--spacing-xs);
+  box-shadow: 3px 3px 0 var(--black);
+  min-width: 7rem;
+}
+
+.button--medium {
+  padding-block: var(--spacing-xs);
+  box-shadow: 3px 3px 0 var(--black);
+  min-width: 7rem;
+}
+
 .button--large {
   padding-block: var(--spacing-xxxl);
   box-shadow: 4px 4px 0 var(--black);
+  min-width: 7rem;
 }
 
 .button__text--medium {
@@ -22,4 +35,11 @@
 
 .button__text--large {
   font-size: var(--font-size-xl);
+}
+
+@media (pointer: fine) {
+  .button:hover {
+    cursor: pointer;
+    background-color: var(--accent2);
+  }
 }
