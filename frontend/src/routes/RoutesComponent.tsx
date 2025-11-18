@@ -6,7 +6,7 @@ const RoutesComponent = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/student" element={<StudentPage title={"Student"} />} />
+      <Route path="/student" element={<StudentPage title={"Grades"} />} />
     </Routes>
   );
 };

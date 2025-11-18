@@ -5,7 +5,7 @@ import Table from "../../components/Table/Table";
 interface Props {
   title: string;
 }
-const GradesPage: React.FC<Props> = ({ title }) => {
+const StudentPage: React.FC<Props> = ({ title }) => {
   return (
     <div className="container">
       <h1>{title}</h1>
@@ -20,4 +20,4 @@ const GradesPage: React.FC<Props> = ({ title }) => {
   );
 };
 
-export default GradesPage;
+export default StudentPage;

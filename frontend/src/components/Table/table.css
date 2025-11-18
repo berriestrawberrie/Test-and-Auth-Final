@@ -29,7 +29,7 @@ tbody tr:nth-child(odd) {
 }
 
 tbody tr:hover {
-  background-color: var(--accent1);
+  background-color: var(--accent2);
 }
 .th-title1 {
   width: 60%;
