@@ -1,0 +1,71 @@
+.login {
+    display: grid;
+    place-self: center;
+    gap: var(--spacing-xl);
+    max-width: 600px;
+    width: 100%;
+}
+
+.login__form {
+    display: grid;
+    place-self: center;
+    border: 3px solid var(--main-300);
+    background-color: var(--main-200);
+    border-radius: 4px;
+    padding: var(--spacing-xxxxl);
+    row-gap: var(--spacing-xl);
+    column-gap: var(--spacing-m);
+    width: 100%;
+    grid-template-columns: 1fr 2fr;
+}
+
+.login__error {
+    grid-column: 1/-1;
+    justify-self: center;
+    color: var(--color-error);
+}
+
+.login__label {
+    grid-column: 1/2;
+    grid-template-columns: subgrid;
+    place-self: center end;
+}
+
+.login__input {
+    padding: var(--spacing-xs);
+    border: var(--border);
+    border-radius: 4px;
+}
+
+.login__remember-checkbox {
+    aspect-ratio: 1;
+    width: 1.2rem;
+    border: var(--border);
+}
+
+.login__input,
+.login__remember-label,
+.login__button-wrapper {
+    grid-column: 2/3;
+}
+
+.login__remember-label,
+.login__button-wrapper {
+    display: flex;
+    column-gap: var(--spacing-m);
+    align-items: center;
+    font-size: var(--font-size-s);
+}
+
+.login__forgot-password {
+    color: #155291;
+}
+
+@media (pointer: fine) {
+
+    .login__label:hover,
+    .login__remember-label:hover,
+    .login__remember-checkbox:hover {
+        cursor: pointer;
+    }
+}

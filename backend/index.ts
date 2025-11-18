@@ -18,6 +18,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/users", verifyToken, usersRoute);
+// app.use("/users", usersRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on localhost:${PORT}`);
