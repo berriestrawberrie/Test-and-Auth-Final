@@ -8,14 +8,9 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    if (user?.role === "ADMIN") {
-      navigate("/admin");
-    } else {
-      navigate("/elev");
-    }
-
-    setUser(null);
     // TODO: add firebase logout logic here.
+    setUser(null);
+    navigate("/");
   };
 
   return (

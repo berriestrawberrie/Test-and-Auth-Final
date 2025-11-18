@@ -23,15 +23,15 @@ const Login = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-      const idToken = await userCredential.user.getIdToken();
+      const token = await userCredential.user.getIdToken();
 
-      const login = await loginUser(idToken);
+      const login = await loginUser(token);
       setUser(login.user);
       if (login.user.role === "ADMIN") {
-        navigate(`/admin/${login.user.id}`);
+        navigate("/admin");
         return;
       }
-      navigate(`/elev/${login.user.id}`);
+      navigate(`/student/${login.user.id}`);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
