@@ -1,5 +1,5 @@
 import LandingPage from "../pages/LandingPage/LandingPage";
-import StudentPage from "../pages/GradesPage/StudentPage";
+import StudentPage from "../pages/StudentPage/StudentPage";
 import { Route, Routes } from "react-router-dom";
 
 const RoutesComponent = () => {
