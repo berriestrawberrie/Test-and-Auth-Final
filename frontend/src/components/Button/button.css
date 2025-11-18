@@ -6,11 +6,6 @@
   border-radius: 8px;
 }
 
-.button:hover {
-  background-color: var(--accent2);
-  transition: background-color 0.2s ease-in-out;
-}
-
 .button--medium {
   padding-block: var(--spacing-xs);
   box-shadow: 3px 3px 0 var(--black);
@@ -41,5 +36,6 @@
   .button:hover {
     cursor: pointer;
     background-color: var(--accent2);
+    transition: background-color 0.2s ease-in-out;
   }
 }
