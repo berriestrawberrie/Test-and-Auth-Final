@@ -3,9 +3,10 @@ import Button from "../Button/Button";
 
 interface Props {
   isSubject: boolean;
+  onchange: () => void;
 }
 
-const Filter: React.FC<Props> = ({ isSubject }) => {
+const Filter: React.FC<Props> = ({ isSubject, onchange }) => {
   return (
     <>
       <div className="filter">
@@ -19,7 +20,7 @@ const Filter: React.FC<Props> = ({ isSubject }) => {
         {/**OPTIONAL BUTTON */}
         <div className="filter__option">
           {isSubject ? (
-            <select>
+            <select id="select-subject" onChange={onchange}>
               <option>Math</option>
               <option>Art</option>
               <option>History</option>
