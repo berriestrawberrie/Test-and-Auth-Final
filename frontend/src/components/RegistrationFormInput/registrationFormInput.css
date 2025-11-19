@@ -1,0 +1,16 @@
+.registration-form__input-wrapper {
+    display: grid;
+    cursor: pointer;
+}
+
+.registration-form__input {
+    padding: var(--spacing-s);
+    border: var(--border);
+    border-radius: var(--spacing-xs);
+}
+
+@media (pointer: fine) {
+    .registration-form__input-wrapper:hover {
+        cursor: pointer;
+    }
+}

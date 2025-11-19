@@ -1,0 +1,27 @@
+.loader {
+    position: absolute;
+    place-self: center;
+    gap: var(--spacing-l);
+    inset: 0;
+    place-items: center;
+    display: grid;
+    height: fit-content;
+}
+
+.loader__title {
+    font-size: var(--font-size-l);
+}
+
+.loader__image {
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotateZ(0deg)
+    }
+
+    to {
+        transform: rotateZ(360deg)
+    }
+}

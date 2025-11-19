@@ -3,6 +3,7 @@ import admin from "firebase-admin";
 import { firebaseTokenSchema } from "../../schemas/firebaseTokenSchema";
 import { prisma } from "../../prisma/client";
 import z from "zod";
+import { userCreationSchema } from "../../schemas/usersSchema";
 
 // @desc: fetch all available users.
 // @method: GET
@@ -51,16 +52,7 @@ export const getUsers = async (req: Request, res: Response) => {
 // @route /users/login
 export const loginUser = async (req: Request, res: Response) => {
   try {
-    const token = req.headers.authorization?.split("Bearer ")[1];
-    if (!token) {
-      return res.status(401).json({ error: "No token provided" });
-    }
-
-    const decodedToken = await admin.auth().verifyIdToken(token);
-
-    const validatedData = firebaseTokenSchema.safeParse(decodedToken);
-    if (!validatedData.success) throw validatedData.error;
-    const { uid } = validatedData.data;
+    const { uid } = req.user!;
 
     const user = await prisma.user.findUnique({
       where: { id: uid },
@@ -74,5 +66,44 @@ export const loginUser = async (req: Request, res: Response) => {
     }
     console.error(error);
     res.status(500).json({ error: "Failed to create/update user" });
+  }
+};
+
+// @desc: Creates a user in the db.
+// @method: POST
+// @route /users/register
+export const registerUser = async (req: Request, res: Response) => {
+  try {
+    const validatedUser = userCreationSchema.safeParse(req.body);
+    if (!validatedUser.success) throw validatedUser.error;
+
+    const { firstName, lastName, personNumber, phone, address, email } = validatedUser.data;
+    const { uid } = req.user!;
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: uid },
+    });
+
+    if (existingUser) {
+      return res.status(409).json({ error: "User already exists" });
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        id: uid,
+        email,
+        firstName,
+        lastName,
+        personNumber,
+        phone,
+        address,
+        role: "STUDENT",
+      },
+    });
+
+    res.status(201).json({ message: "User created successfully", user });
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({ error: "Failed to create user" });
   }
 };
