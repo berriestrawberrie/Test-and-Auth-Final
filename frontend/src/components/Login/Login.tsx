@@ -31,7 +31,8 @@ const Login = () => {
         navigate("/admins");
         return;
       }
-      navigate(`/students/${login.user.id}`);
+      // navigate(`/students/${login.user.id}`); //! If we want the route to be /students/:id
+      navigate("/students");
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);

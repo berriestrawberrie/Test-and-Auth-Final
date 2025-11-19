@@ -20,7 +20,7 @@ const RoutesComponent = () => {
           </RouteAuthenticator>
         }
       />
-      <Route path="/student" element={<StudentPage title={"Grades"} />} />
+      <Route path="/students" element={<StudentPage title={"Grades"} />} />
     </Routes>
   );
 };
