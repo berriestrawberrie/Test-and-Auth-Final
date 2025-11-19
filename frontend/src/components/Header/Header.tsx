@@ -1,21 +1,29 @@
 import useUserStore from "../../stores/usersStore";
 import "./header.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/firebase.init";
 
 const Header: React.FC = () => {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isOnLandingPage = location.pathname === "/";
 
-  const handleLogout = () => {
-    // TODO: add firebase logout logic here.
-    setUser(null);
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      navigate("/");
+    } catch (error) {
+      console.error("Something went wrong at handleLogout", error);
+    }
   };
 
   return (
     <header className="header">
-      {user && (
+      {!isOnLandingPage && user && (
         <button className="header__logout-button" onClick={handleLogout}>
           <img
             className="header__logout-icon"

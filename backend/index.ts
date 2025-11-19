@@ -10,7 +10,7 @@ dotenv.config();
 admin.initializeApp(); // Need to supply filepath to your json file containing your firebase info (GOOGLE_APPLICATION_CREDENTIALS in .env) to work.
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 const corsOptions = {
   origin: ["http://localhost:1337"],
 };

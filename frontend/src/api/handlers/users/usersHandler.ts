@@ -1,7 +1,8 @@
 import axios from "axios";
 import type { UserCreationInterface } from "../../../interfaces/userInterfaces";
 
-const BASE_URL = "http://localhost:1338/users"; // Or whatever url it will be.
+const BACKEND_PORT = "3000";
+const BASE_URL = `http://localhost:${BACKEND_PORT}/users`;
 
 export const getUsers = async () => {
   try {
