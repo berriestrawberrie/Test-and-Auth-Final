@@ -1,6 +1,4 @@
 import type { Request, Response } from "express";
-import admin from "firebase-admin";
-import { firebaseTokenSchema } from "../../schemas/firebaseTokenSchema";
 import { prisma } from "../../prisma/client";
 import z from "zod";
 import { userCreationSchema } from "../../schemas/usersSchema";
@@ -26,6 +24,7 @@ export const getUsers = async (req: Request, res: Response) => {
             id: true,
             year: true,
             date: true,
+            grade: true,
             course: {
               select: {
                 id: true,
