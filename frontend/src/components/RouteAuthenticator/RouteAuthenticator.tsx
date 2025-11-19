@@ -21,23 +21,21 @@ const RouteAuthenticator = ({ children, requiredRole }: Props) => {
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
       try {
         if (!firebaseUser) {
-          setLoading(false);
           setAuthorized(false);
+          setLoading(false);
           return;
         }
 
+        let userToCheck = user;
         if (!user) {
           const token = await firebaseUser.getIdToken();
           const response = await loginUser(token);
           setUser(response.user);
+          userToCheck = response.user;
+        }
 
-          if (!requiredRole || response.user.role === requiredRole) {
-            setAuthorized(true);
-          }
-        } else {
-          if (!requiredRole || user.role === requiredRole) {
-            setAuthorized(true);
-          }
+        if (!requiredRole || userToCheck?.role === requiredRole) {
+          setAuthorized(true);
         }
       } catch (error) {
         console.error("Auth check failed:", error);

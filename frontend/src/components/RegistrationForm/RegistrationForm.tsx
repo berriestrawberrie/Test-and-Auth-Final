@@ -7,6 +7,8 @@ import { auth } from "../../firebase/firebase.init";
 import { registerUser } from "../../api/handlers/users/usersHandler";
 import { useNavigate } from "react-router-dom";
 import { userCreationSchema } from "../../schemas/usersSchema";
+import { FirebaseError } from "firebase/app";
+import { AxiosError } from "axios";
 
 const FORM_INITIAL_STATE = {
   firstname: "",
@@ -67,7 +69,7 @@ const RegistrationForm = () => {
 
       setFormData(FORM_INITIAL_STATE);
       navigate("/admins");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Registration error:", error);
 
       if (firebaseUser) {
@@ -79,12 +81,20 @@ const RegistrationForm = () => {
         }
       }
 
-      if (error.code === "auth/email-already-in-use") {
-        setError("This email is already registered");
-      } else if (error.code === "auth/weak-password") {
-        setError("Password should be at least 6 characters");
-      } else if (error.response?.status === 409) {
-        setError("User already exists in database");
+      if (error instanceof FirebaseError) {
+        if (error.code === "auth/email-already-in-use") {
+          setError("This email is already registered");
+        } else if (error.code === "auth/weak-password") {
+          setError("Password should be at least 6 characters");
+        } else {
+          setError("Registration failed. Please try again.");
+        }
+      } else if (error instanceof AxiosError) {
+        if (error.response?.status === 409) {
+          setError("User already exists in database");
+        } else {
+          setError("Registration failed. Please try again.");
+        }
       } else {
         setError("Registration failed. Please try again.");
       }
