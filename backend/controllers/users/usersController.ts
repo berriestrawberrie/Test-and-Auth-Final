@@ -1,6 +1,4 @@
 import type { Request, Response } from "express";
-import admin from "firebase-admin";
-import { firebaseTokenSchema } from "../../schemas/firebaseTokenSchema";
 import { prisma } from "../../prisma/client";
 import z from "zod";
 import { userCreationSchema } from "../../schemas/usersSchema";
