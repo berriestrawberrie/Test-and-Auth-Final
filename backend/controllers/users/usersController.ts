@@ -26,6 +26,7 @@ export const getUsers = async (req: Request, res: Response) => {
             id: true,
             year: true,
             date: true,
+            grade: true,
             course: {
               select: {
                 id: true,

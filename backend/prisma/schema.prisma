@@ -31,13 +31,22 @@ enum UserRole {
   ADMIN
 }
 
+enum GradeValue {
+  A
+  B
+  C
+  D
+  F
+}
+
 model Grade {
-  id        Int      @id @default(autoincrement())
-  student   User     @relation(fields: [studentId], references: [id])
+  id        Int        @id @default(autoincrement())
+  student   User       @relation(fields: [studentId], references: [id])
   studentId String
+  grade     GradeValue
   year      Int
   date      DateTime
-  course    Course   @relation(fields: [courseId], references: [id])
+  course    Course     @relation(fields: [courseId], references: [id])
   courseId  Int
 
   //Improves query performance 

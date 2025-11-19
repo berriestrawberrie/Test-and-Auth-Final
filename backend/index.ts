@@ -4,6 +4,7 @@ import cors from "cors";
 import admin from "firebase-admin";
 import { usersRoute } from "./routes/usersRoute";
 import { verifyToken } from "./middleware/auth";
+import { unProtectedRoute } from "./routes/unProtectedRoute";
 
 dotenv.config();
 admin.initializeApp(); // Need to supply filepath to your json file containing your firebase info (GOOGLE_APPLICATION_CREDENTIALS in .env) to work.
@@ -18,7 +19,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/users", verifyToken, usersRoute);
-// app.use("/users", usersRoute);
+app.use("/unprotected", unProtectedRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on localhost:${PORT}`);
