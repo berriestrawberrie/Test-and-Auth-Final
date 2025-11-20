@@ -7,8 +7,8 @@ const AdminLandingPage = () => {
   return (
     <div className="admin-button-wrapper">
       <Button text="Register Student" size="large" onClick={() => navigate("/admins/register")} />
-      <Button text="Register Grades" size="large" />
-      <Button text="Admin Student Accounts" size="large" />
+      <Button text="Register Grades" size="large" onClick={() => navigate("/admins/grades")} />
+      <Button text="Admin Student Accounts" size="large" onClick={() => navigate("/admins/accounts")} />
     </div>
   );
 };
