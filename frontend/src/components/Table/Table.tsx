@@ -1,4 +1,5 @@
 import "./table.css";
+import type { Student } from "../../interfaces/studentInterfaces";
 
 interface Props {
   title1: string;
@@ -6,6 +7,7 @@ interface Props {
   title3: string;
   title4?: string;
   isExpand: boolean;
+  studentData?: Student | null; // optional and nullable if you're conditionally passing it
 }
 
 const Table: React.FC<Props> = ({
@@ -14,7 +16,9 @@ const Table: React.FC<Props> = ({
   title3,
   title4,
   isExpand,
+  studentData,
 }) => {
+  console.log("STUDENT DATA HERE: ", studentData);
   return (
     <>
       <div className="table">

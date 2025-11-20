@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import admin from "firebase-admin";
 import { usersRoute } from "./routes/usersRoute";
+import { studentsRoute } from "./routes/studentsRoute";
 import { verifyToken } from "./middleware/auth";
 import { unProtectedRoute } from "./routes/unProtectedRoute";
 
@@ -20,6 +21,8 @@ app.use(express.json());
 
 app.use("/users", verifyToken, usersRoute);
 app.use("/unprotected", unProtectedRoute);
+
+app.use("/students", studentsRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on localhost:${PORT}`);
