@@ -22,30 +22,19 @@ const Table: React.FC<Props> = ({
   selectedYear,
   selectedCourse,
 }) => {
-  let filteredGrades: Grade[] = [];
+  const filteredGrades = studentData.grades
+    .filter((grade) => {
+      //IF YEAR SET FILTER ONLY MATCHING OTHERWISE INCLUDE ALL
+      const yearMatch = selectedYear ? grade.year === selectedYear : true;
 
-  //CHECK IF COURSES FILTERED
-  if (selectedCourse === "All") {
-    //FILTER & SORT GRADES BY YEAR ONLY
-    filteredGrades = selectedYear
-      ? studentData.grades
-          .filter((grade) => grade.year === selectedYear)
-          .sort((a, b) => a.year - b.year)
-      : studentData.grades.sort((a, b) => a.year - b.year);
-  } else {
-    //FILTER & SORT GRADES BY YEAR
-    filteredGrades = selectedYear
-      ? studentData.grades
-          .filter(
-            (grade) =>
-              grade.year === selectedYear &&
-              grade.course.title === selectedCourse
-          )
-          .sort((a, b) => a.year - b.year)
-      : studentData.grades
-          .filter((grade) => grade.course.title === selectedCourse)
-          .sort((a, b) => a.year - b.year);
-  }
+      //IF COURSE SET FILTER ONLY MATCHING OTHERWISE INCLUDE ALL
+      const courseMatch =
+        selectedCourse && selectedCourse !== "All"
+          ? grade.course.title === selectedCourse
+          : true;
+      return yearMatch && courseMatch;
+    })
+    .sort((a, b) => a.year - b.year);
 
   return (
     <>
