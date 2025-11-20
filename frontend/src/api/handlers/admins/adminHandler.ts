@@ -1,6 +1,5 @@
 import axios from "axios";
-import type { UserCreatingWithPasswordInterface, UserCreationInterface } from "../../../interfaces/userInterfaces";
-import type { User } from "firebase/auth";
+import type { UserCreatingWithPasswordInterface } from "../../../interfaces/userInterfaces";
 import { userCreationSchema } from "../../../schemas/usersSchema";
 
 const BACKEND_PORT = "3000";
