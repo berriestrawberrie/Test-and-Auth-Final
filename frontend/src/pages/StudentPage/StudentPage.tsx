@@ -12,6 +12,8 @@ const StudentPage: React.FC<Props> = ({ title }) => {
   //PULL USER FROM ZUSTAND
   const user = useUserStore((state) => state.user);
   const [studentData, setStudentData] = useState(null);
+  //FILTER STATE
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -30,14 +32,17 @@ const StudentPage: React.FC<Props> = ({ title }) => {
   return (
     <div className="container">
       <h1>{title}</h1>
-      <Filter isSubject={true} onchange={() => {}} />
-      <Table
-        title1={"Course"}
-        title2={"Grade"}
-        title3={"Year"}
-        isExpand={false}
-        studentData={studentData}
-      />
+      <Filter isSubject={true} setSelectedYear={setSelectedYear} />
+      {studentData && (
+        <Table
+          title1={"Course"}
+          title2={"Grade"}
+          title3={"Year"}
+          isExpand={false}
+          studentData={studentData}
+          selectedYear={selectedYear}
+        />
+      )}
     </div>
   );
 };

@@ -7,7 +7,8 @@ interface Props {
   title3: string;
   title4?: string;
   isExpand: boolean;
-  studentData?: Student | null; // optional and nullable if you're conditionally passing it
+  studentData: Student;
+  selectedYear: number | null;
 }
 
 const Table: React.FC<Props> = ({
@@ -17,8 +18,12 @@ const Table: React.FC<Props> = ({
   title4,
   isExpand,
   studentData,
+  selectedYear,
 }) => {
-  console.log("STUDENT DATA HERE: ", studentData);
+  //FILTER GRADES BY YEAR
+  const filteredGrades = selectedYear
+    ? studentData.grades.filter((grade) => grade.year === selectedYear)
+    : studentData.grades;
   return (
     <>
       <div className="table">
@@ -33,24 +38,14 @@ const Table: React.FC<Props> = ({
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Column 1 Data</td>
-              <td>Column 2 Data</td>
-              <td>Column 3 Data</td>
-              {isExpand && <td>Column 4 Data</td>}
-            </tr>
-            <tr>
-              <td>Column 1 Data</td>
-              <td>Column 2 Data</td>
-              <td>Column 3 Data</td>
-              {isExpand && <td>Column 4 Data</td>}
-            </tr>
-            <tr>
-              <td>Column 1 Data</td>
-              <td>Column 2 Data</td>
-              <td>Column 3 Data</td>
-              {isExpand && <td>Column 4 Data</td>}
-            </tr>
+            {filteredGrades.map((grade) => (
+              <tr key={grade.id}>
+                <td>{grade.course.title}</td>
+                <td>{grade.grade}</td>
+                <td>{grade.year}</td>
+                {isExpand && <td>Column 4 Data</td>}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
