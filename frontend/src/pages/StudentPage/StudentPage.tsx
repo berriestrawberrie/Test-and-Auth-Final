@@ -12,8 +12,10 @@ const StudentPage: React.FC<Props> = ({ title }) => {
   //PULL USER FROM ZUSTAND
   const user = useUserStore((state) => state.user);
   const [studentData, setStudentData] = useState(null);
-  //FILTER STATE
+  //FILTER YEAR
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  //FILTER COURSES
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -32,7 +34,12 @@ const StudentPage: React.FC<Props> = ({ title }) => {
   return (
     <div className="container">
       <h1>{title}</h1>
-      <Filter isSubject={true} setSelectedYear={setSelectedYear} />
+      <Filter
+        isSubject={true}
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        setSelectedCourse={setSelectedCourse}
+      />
       {studentData && (
         <Table
           title1={"Course"}
@@ -41,6 +48,7 @@ const StudentPage: React.FC<Props> = ({ title }) => {
           isExpand={false}
           studentData={studentData}
           selectedYear={selectedYear}
+          selectedCourse={selectedCourse}
         />
       )}
     </div>

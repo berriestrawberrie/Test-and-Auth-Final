@@ -3,7 +3,7 @@ import { prisma } from "../../prisma/client";
 
 // @desc: fetch the logged in user data
 // @method: GET
-// @route /student
+// @route /students
 export const getStudent = async (req: Request, res: Response) => {
   try {
     //EXTRACT HEADER FROM REQUEST

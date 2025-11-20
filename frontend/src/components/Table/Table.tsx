@@ -1,5 +1,5 @@
 import "./table.css";
-import type { Student } from "../../interfaces/studentInterfaces";
+import type { Student, Grade } from "../../interfaces/studentInterfaces";
 
 interface Props {
   title1: string;
@@ -9,6 +9,7 @@ interface Props {
   isExpand: boolean;
   studentData: Student;
   selectedYear: number | null;
+  selectedCourse: string | null;
 }
 
 const Table: React.FC<Props> = ({
@@ -19,11 +20,33 @@ const Table: React.FC<Props> = ({
   isExpand,
   studentData,
   selectedYear,
+  selectedCourse,
 }) => {
-  //FILTER GRADES BY YEAR
-  const filteredGrades = selectedYear
-    ? studentData.grades.filter((grade) => grade.year === selectedYear)
-    : studentData.grades;
+  let filteredGrades: Grade[] = [];
+
+  //CHECK IF COURSES FILTERED
+  if (selectedCourse === "All") {
+    //FILTER & SORT GRADES BY YEAR ONLY
+    filteredGrades = selectedYear
+      ? studentData.grades
+          .filter((grade) => grade.year === selectedYear)
+          .sort((a, b) => a.year - b.year)
+      : studentData.grades.sort((a, b) => a.year - b.year);
+  } else {
+    //FILTER & SORT GRADES BY YEAR
+    filteredGrades = selectedYear
+      ? studentData.grades
+          .filter(
+            (grade) =>
+              grade.year === selectedYear &&
+              grade.course.title === selectedCourse
+          )
+          .sort((a, b) => a.year - b.year)
+      : studentData.grades
+          .filter((grade) => grade.course.title === selectedCourse)
+          .sort((a, b) => a.year - b.year);
+  }
+
   return (
     <>
       <div className="table">
