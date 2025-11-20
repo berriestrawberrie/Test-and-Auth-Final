@@ -2,13 +2,11 @@ import "./registrationForm.css";
 import RegistrationFormInput from "../RegistrationFormInput/RegistrationFormInput";
 import { useState } from "react";
 import Button from "../Button/Button";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase.init";
-import { registerUser } from "../../api/handlers/users/usersHandler";
 import { useNavigate } from "react-router-dom";
-import { userCreationSchema } from "../../schemas/usersSchema";
 import { FirebaseError } from "firebase/app";
 import { AxiosError } from "axios";
+import { registerStudent } from "../../api/handlers/admins/adminHandler";
 
 const FORM_INITIAL_STATE = {
   firstname: "",
@@ -47,39 +45,29 @@ const RegistrationForm = () => {
 
     setIsLoading(true);
     setError("");
-    let firebaseUser = null;
-
     try {
-      const validatedUser = userCreationSchema.safeParse({
-        firstName: formData.firstname,
-        lastName: formData.lastname,
-        personNumber: formData.personnumber,
-        phone: formData.phone,
-        address: formData.address,
-        email: formData.email,
-      });
-      if (!validatedUser.success) throw validatedUser.error;
+      const adminUser = auth.currentUser;
+      if (!adminUser) throw new Error("Admin not authenticated");
+      const adminToken = await adminUser.getIdToken();
 
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      firebaseUser = userCredential.user;
-
-      const token = await firebaseUser.getIdToken();
-
-      await registerUser(validatedUser.data, token);
+      const registeredStudent = await registerStudent(
+        {
+          firstName: formData.firstname,
+          lastName: formData.lastname,
+          personNumber: formData.personnumber,
+          phone: formData.phone,
+          address: formData.address,
+          email: formData.email,
+          password: formData.password,
+        },
+        adminToken
+      );
+      console.log(registeredStudent);
 
       setFormData(FORM_INITIAL_STATE);
       navigate("/admins");
     } catch (error: unknown) {
       console.error("Registration error:", error);
-
-      if (firebaseUser) {
-        try {
-          await firebaseUser.delete();
-          console.log("Rolled back Firebase user creation");
-        } catch (deleteError) {
-          console.error("Failed to rollback Firebase user:", deleteError);
-        }
-      }
 
       if (error instanceof FirebaseError) {
         if (error.code === "auth/email-already-in-use") {

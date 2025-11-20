@@ -1,4 +1,6 @@
 import RouteAuthenticator from "../components/RouteAuthenticator/RouteAuthenticator";
+import AdminAccountsPage from "../pages/AdminAccountsPage/AdminAccountsPage";
+import AdminGradesPage from "../pages/AdminGradesPage/AdminGradesPage";
 import AdminLandingPage from "../pages/AdminLandingPage/AdminLandingPage";
 import LandingPage from "../pages/LandingPage/LandingPage";
 import RegisterUserPage from "../pages/RegisterUserPage/RegisterUserPage";
@@ -16,6 +18,8 @@ const RoutesComponent = () => {
             <Routes>
               <Route index element={<AdminLandingPage />} />
               <Route path="register" element={<RegisterUserPage />} />
+              <Route path="accounts" element={<AdminAccountsPage />} />
+              <Route path="grades" element={<AdminGradesPage />} />
             </Routes>
           </RouteAuthenticator>
         }
