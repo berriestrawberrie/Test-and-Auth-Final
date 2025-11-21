@@ -24,7 +24,16 @@ const RoutesComponent = () => {
           </RouteAuthenticator>
         }
       />
-      <Route path="/students" element={<StudentPage title={"Grades"} />} />
+      <Route
+        path="/students/*"
+        element={
+          <RouteAuthenticator requiredRole="STUDENT">
+            <Routes>
+              <Route index element={<StudentPage title={"Grades"} />} />
+            </Routes>
+          </RouteAuthenticator>
+        }
+      />
     </Routes>
   );
 };

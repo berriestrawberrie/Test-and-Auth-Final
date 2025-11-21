@@ -17,6 +17,9 @@
   box-shadow: 3px 3px 0 var(--black);
   min-width: 7rem;
 }
+.button--active {
+  background-color: var(--accent2);
+}
 
 .button--large {
   padding-block: var(--spacing-xxxl);
