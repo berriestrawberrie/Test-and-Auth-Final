@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import type { UserInterface } from "../interfaces/userInterfaces";
 
 interface UserStore {
@@ -11,19 +10,12 @@ interface UserStore {
       | ((prev: UserInterface | null) => UserInterface | null)
   ) => void;
 }
-const useUserStore = create<UserStore>()(
-  persist(
-    (set) => ({
-      user: null,
-      setUser: (value) =>
-        set((state) => ({
-          user: typeof value === "function" ? value(state.user) : value,
-        })),
-    }),
-    {
-      name: "user-session",
-    }
-  )
-);
+const useUserStore = create<UserStore>((set) => ({
+  user: null,
+  setUser: (value) =>
+    set((state) => ({
+      user: typeof value === "function" ? value(state.user) : value,
+    })),
+}));
 
 export default useUserStore;
