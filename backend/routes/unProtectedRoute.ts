@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getUsers } from "../controllers/users/usersController";
+import { getStudents } from "../controllers/admins/adminsController";
 
 export const unProtectedRoute = Router();
 
-unProtectedRoute.get("/users", getUsers);
+unProtectedRoute.get("/students", getStudents);

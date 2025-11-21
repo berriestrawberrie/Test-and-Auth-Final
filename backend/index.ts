@@ -4,8 +4,9 @@ import cors from "cors";
 import admin from "firebase-admin";
 import { usersRoute } from "./routes/usersRoute";
 import { studentsRoute } from "./routes/studentsRoute";
-import { verifyToken } from "./middleware/auth";
+import { verifyAdmin, verifyToken } from "./middleware/auth";
 import { unProtectedRoute } from "./routes/unProtectedRoute";
+import { adminsRoute } from "./routes/adminsRoute";
 
 dotenv.config();
 admin.initializeApp(); // Need to supply filepath to your json file containing your firebase info (GOOGLE_APPLICATION_CREDENTIALS in .env) to work.
@@ -20,6 +21,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/users", verifyToken, usersRoute);
+app.use("/admins", verifyToken, verifyAdmin, adminsRoute);
 app.use("/unprotected", unProtectedRoute);
 
 app.use("/students", studentsRoute);
