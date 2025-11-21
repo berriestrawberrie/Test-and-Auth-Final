@@ -52,6 +52,7 @@ export const getStudents = async (req: Request, res: Response) => {
 // @method: POST
 // @route /admins/register
 export const registerStudent = async (req: Request, res: Response) => {
+  let firebaseUser: admin.auth.UserRecord | null = null;
   try {
     const validatedUser = userCreationSchema.safeParse(req.body);
     if (!validatedUser.success) throw validatedUser.error;
@@ -66,7 +67,7 @@ export const registerStudent = async (req: Request, res: Response) => {
       return res.status(409).json({ error: "Student already exists" });
     }
 
-    const firebaseUser = await admin.auth().createUser({
+    firebaseUser = await admin.auth().createUser({
       email,
       password,
       emailVerified: false,
@@ -87,6 +88,14 @@ export const registerStudent = async (req: Request, res: Response) => {
 
     res.status(201).json({ message: "Student created successfully", user });
   } catch (error) {
+    if (firebaseUser && firebaseUser.uid) {
+      try {
+        await admin.auth().deleteUser(firebaseUser.uid);
+        console.log("Rolled back Firebase user creation");
+      } catch (rollbackError) {
+        console.error("Failed to rollback Firebase user:", rollbackError);
+      }
+    }
     console.error("Registration error:", error);
     res.status(500).json({ error: "Failed to create student" });
   }
