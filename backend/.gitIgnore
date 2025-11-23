@@ -1,2 +1,6 @@
 firebaseServiceAccountKey.json
 /generated/prisma
+*.env
+.env*
+.env.test
+!example.env
