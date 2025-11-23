@@ -1,5 +1,5 @@
 import "./table.css";
-import type { Student, Grade } from "../../interfaces/studentInterfaces";
+import type { Student } from "../../interfaces/studentInterfaces";
 
 interface Props {
   title1: string;
@@ -28,10 +28,7 @@ const Table: React.FC<Props> = ({
       const yearMatch = selectedYear ? grade.year === selectedYear : true;
 
       //IF COURSE SET FILTER ONLY MATCHING OTHERWISE INCLUDE ALL
-      const courseMatch =
-        selectedCourse && selectedCourse !== "All"
-          ? grade.course.title === selectedCourse
-          : true;
+      const courseMatch = selectedCourse && selectedCourse !== "All" ? grade.course.title === selectedCourse : true;
       return yearMatch && courseMatch;
     })
     .sort((a, b) => a.year - b.year);

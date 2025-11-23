@@ -3,22 +3,17 @@ import { prisma } from "../../prisma/client";
 
 // @desc: fetch the logged in user data
 // @method: GET
-// @route /students
+// @route /students/:id
 export const getStudent = async (req: Request, res: Response) => {
   try {
-    //EXTRACT HEADER FROM REQUEST
-    const authHeader = req.headers.authorization;
-    //IF HEADER MISSING OR INVALID RETURN
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res
-        .status(401)
-        .json({ message: "Missing or invalid Authorization header" });
+    const { id } = req.params;
+
+    if (req.user?.uid !== id) {
+      return res.status(403).json({ message: "Forbidden: You can only access your own data" });
     }
-    //PARSE UID FROM HEADER
-    const uid = authHeader.split(" ")[1];
 
     const student = await prisma.user.findUnique({
-      where: { id: uid },
+      where: { id },
       select: {
         id: true,
         firstName: true,
@@ -48,9 +43,7 @@ export const getStudent = async (req: Request, res: Response) => {
     });
     //CHECK STUDENT EXISTS
     if (!student) {
-      return res
-        .status(404)
-        .json({ message: "Error Fetching student data: Student not found" });
+      return res.status(404).json({ message: "Error Fetching student data: Student not found" });
     }
 
     return res.status(200).json(student);
