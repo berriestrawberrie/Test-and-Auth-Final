@@ -18,12 +18,14 @@ describe("GET /admins/students", () => {
   const mockAdminToken = "mock-admin-token";
 
   beforeEach(async () => {
+    // Clean database completely before each test
     await testPrisma.$transaction([
       testPrisma.grade.deleteMany(),
       testPrisma.user.deleteMany(),
       testPrisma.course.deleteMany(),
     ]);
 
+    // Create the admin user fresh for each test
     await testPrisma.user.create({
       data: {
         id: "test-admin-uid",
@@ -39,6 +41,12 @@ describe("GET /admins/students", () => {
   });
 
   afterAll(async () => {
+    // Final cleanup
+    await testPrisma.$transaction([
+      testPrisma.grade.deleteMany(),
+      testPrisma.user.deleteMany(),
+      testPrisma.course.deleteMany(),
+    ]);
     await testPrisma.$disconnect();
   });
 
@@ -91,6 +99,7 @@ describe("GET /admins/students", () => {
   });
 
   it("should return 404 when no students exist", async () => {
+    // Only the admin exists (created in beforeEach), no students
     const response = await request(app)
       .get("/admins/students")
       .set("Authorization", `Bearer ${mockAdminToken}`)
