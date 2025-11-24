@@ -20,6 +20,15 @@ import type { User } from "@prisma/client";
 
 const TEST_ADMIN_ID = "adminAdminAdminAdminAdmin123";
 
+const generateFirebaseUid = (): string => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let uid = "";
+  for (let i = 0; i < 28; i++) {
+    uid += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return uid;
+};
+
 describe("GET /admins/students", () => {
   const mockAdminToken = "mock-admin-token";
 
@@ -234,11 +243,11 @@ describe("DELETE /admins/students/:id", () => {
 
   it("should delete a student successfully", async () => {
     // Create a student to delete
-    const studentId = "mIXXxZONilPmVuoTKPrwi4RPL722";
+    const studentId = generateFirebaseUid();
     await testPrisma.user.create({
       data: {
         id: studentId,
-        email: "delete-me@test.com",
+        email: `delete-me-${Date.now()}@test.com`,
         firstName: "Delete",
         lastName: "Me",
         personNumber: "19970101-1234",

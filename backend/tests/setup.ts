@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 import path from "path";
 import { testPrisma } from "./testClient";
 
-// Load test environment variables
 dotenv.config({ path: path.resolve(__dirname, "../.env.test") });
 
 if (process.env.NODE_ENV !== "test") {
@@ -13,13 +12,12 @@ console.log("✅ Test environment loaded");
 
 const TEST_ADMIN_ID = "adminAdminAdminAdminAdmin123";
 
+// ✅ Create admin once
 beforeAll(async () => {
-  // Clean database completely
   await testPrisma.grade.deleteMany();
   await testPrisma.user.deleteMany();
   await testPrisma.course.deleteMany();
 
-  // Create the admin user that all tests will use
   await testPrisma.user.create({
     data: {
       id: TEST_ADMIN_ID,
@@ -36,6 +34,7 @@ beforeAll(async () => {
   console.log("✅ Global test admin created");
 });
 
+// ✅ Final cleanup only
 afterAll(async () => {
   await testPrisma.grade.deleteMany();
   await testPrisma.user.deleteMany();
