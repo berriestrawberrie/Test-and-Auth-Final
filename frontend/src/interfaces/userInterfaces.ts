@@ -14,4 +14,12 @@ export interface UserCreationInterface {
 export interface UserCreatingWithPasswordInterface extends UserCreationInterface {
   password: string;
 }
+
+export interface loggedInUserInterface {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: UserRoleType;
+}
 export type UserRoleType = "STUDENT" | "ADMIN";

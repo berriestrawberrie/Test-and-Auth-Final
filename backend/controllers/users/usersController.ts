@@ -15,6 +15,7 @@ export const loginUser = async (req: Request, res: Response) => {
         email: true,
         firstName: true,
         lastName: true,
+        role: true,
       },
     });
     if (!user) throw Error("No user found");
