@@ -5,6 +5,7 @@ import { usersRoute } from "./routes/usersRoute";
 import { verifyAdmin, verifyToken } from "./middleware/auth";
 import { unProtectedRoute } from "./routes/unProtectedRoute";
 import { adminsRoute } from "./routes/adminsRoute";
+import { studentsRoute } from "./routes/studentsRoute";
 
 admin.initializeApp(); // Need to supply filepath to your json file containing your firebase info (GOOGLE_APPLICATION_CREDENTIALS in .env) to work.
 
@@ -18,4 +19,6 @@ app.use(express.json());
 
 app.use("/users", verifyToken, usersRoute);
 app.use("/admins", verifyToken, verifyAdmin, adminsRoute);
+app.use("/students", verifyToken, studentsRoute);
+
 app.use("/unprotected", unProtectedRoute);

@@ -1,4 +1,5 @@
 import "./table.css";
+import type { Student } from "../../interfaces/studentInterfaces";
 
 interface Props {
   title1: string;
@@ -6,6 +7,9 @@ interface Props {
   title3: string;
   title4?: string;
   isExpand: boolean;
+  studentData: Student;
+  selectedYear: number | null;
+  selectedCourse: string | null;
 }
 
 const Table: React.FC<Props> = ({
@@ -14,7 +18,21 @@ const Table: React.FC<Props> = ({
   title3,
   title4,
   isExpand,
+  studentData,
+  selectedYear,
+  selectedCourse,
 }) => {
+  const filteredGrades = studentData.grades
+    .filter((grade) => {
+      //IF YEAR SET FILTER ONLY MATCHING OTHERWISE INCLUDE ALL
+      const yearMatch = selectedYear ? grade.year === selectedYear : true;
+
+      //IF COURSE SET FILTER ONLY MATCHING OTHERWISE INCLUDE ALL
+      const courseMatch = selectedCourse && selectedCourse !== "All" ? grade.course.title === selectedCourse : true;
+      return yearMatch && courseMatch;
+    })
+    .sort((a, b) => a.year - b.year);
+
   return (
     <>
       <div className="table">
@@ -29,24 +47,14 @@ const Table: React.FC<Props> = ({
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Column 1 Data</td>
-              <td>Column 2 Data</td>
-              <td>Column 3 Data</td>
-              {isExpand && <td>Column 4 Data</td>}
-            </tr>
-            <tr>
-              <td>Column 1 Data</td>
-              <td>Column 2 Data</td>
-              <td>Column 3 Data</td>
-              {isExpand && <td>Column 4 Data</td>}
-            </tr>
-            <tr>
-              <td>Column 1 Data</td>
-              <td>Column 2 Data</td>
-              <td>Column 3 Data</td>
-              {isExpand && <td>Column 4 Data</td>}
-            </tr>
+            {filteredGrades.map((grade) => (
+              <tr key={grade.id}>
+                <td>{grade.course.title}</td>
+                <td>{grade.grade}</td>
+                <td>{grade.year}</td>
+                {isExpand && <td>Column 4 Data</td>}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

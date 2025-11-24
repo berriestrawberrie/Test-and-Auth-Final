@@ -2,7 +2,6 @@ import "./registrationForm.css";
 import RegistrationFormInput from "../RegistrationFormInput/RegistrationFormInput";
 import { useState } from "react";
 import Button from "../Button/Button";
-import { auth } from "../../firebase/firebase.init";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { AxiosError } from "axios";
@@ -46,22 +45,15 @@ const RegistrationForm = () => {
     setIsLoading(true);
     setError("");
     try {
-      const adminUser = auth.currentUser;
-      if (!adminUser) throw new Error("Admin not authenticated");
-      const adminToken = await adminUser.getIdToken();
-
-      const registeredStudent = await registerStudent(
-        {
-          firstName: formData.firstname,
-          lastName: formData.lastname,
-          personNumber: formData.personnumber,
-          phone: formData.phone,
-          address: formData.address,
-          email: formData.email,
-          password: formData.password,
-        },
-        adminToken
-      );
+      const registeredStudent = await registerStudent({
+        firstName: formData.firstname,
+        lastName: formData.lastname,
+        personNumber: formData.personnumber,
+        phone: formData.phone,
+        address: formData.address,
+        email: formData.email,
+        password: formData.password,
+      });
       console.log(registeredStudent);
 
       setFormData(FORM_INITIAL_STATE);
