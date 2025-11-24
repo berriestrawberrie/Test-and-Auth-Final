@@ -1,10 +1,12 @@
 import axios from "axios";
+import { getCurrentUserToken } from "../../auth/token";
 const BACKEND_PORT = "3000";
 const BASE_URL = `http://localhost:${BACKEND_PORT}/students`;
 
-export const getStudentData = async (token: string) => {
+export const getStudentData = async (id: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}`, {
+    const token = await getCurrentUserToken();
+    const response = await axios.get(`${BASE_URL}/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

@@ -22,9 +22,9 @@ app.use(express.json());
 
 app.use("/users", verifyToken, usersRoute);
 app.use("/admins", verifyToken, verifyAdmin, adminsRoute);
-app.use("/unprotected", unProtectedRoute);
+app.use("/students", verifyToken, studentsRoute);
 
-app.use("/students", studentsRoute);
+app.use("/unprotected", unProtectedRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on localhost:${PORT}`);
