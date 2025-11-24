@@ -26,32 +26,8 @@ describe("GET /admins/students", () => {
   beforeEach(async () => {
     // Clean database completely before each test
     await testPrisma.grade.deleteMany();
-    await testPrisma.user.deleteMany();
+    await testPrisma.user.deleteMany({ where: { role: "STUDENT" } });
     await testPrisma.course.deleteMany();
-
-    // Use upsert to avoid unique constraint errors
-    await testPrisma.user.upsert({
-      where: { id: TEST_ADMIN_ID },
-      update: {},
-      create: {
-        id: TEST_ADMIN_ID,
-        email: "admin@test.com",
-        firstName: "Test",
-        lastName: "Admin",
-        personNumber: "19900101-1234",
-        phone: "+46701234567",
-        address: "Test Street 1",
-        role: "ADMIN",
-      },
-    });
-  });
-
-  afterAll(async () => {
-    // Final cleanup
-    await testPrisma.grade.deleteMany();
-    await testPrisma.user.deleteMany();
-    await testPrisma.course.deleteMany();
-    await testPrisma.$disconnect();
   });
 
   it("should return only students, not admins", async () => {
@@ -120,30 +96,10 @@ describe("POST /admins/register", () => {
 
   beforeEach(async () => {
     await testPrisma.grade.deleteMany();
-    await testPrisma.user.deleteMany();
-    await testPrisma.course.deleteMany();
-
-    await testPrisma.user.upsert({
-      where: { id: TEST_ADMIN_ID },
-      update: {},
-      create: {
-        id: TEST_ADMIN_ID,
-        email: "admin@test.com",
-        firstName: "Test",
-        lastName: "Admin",
-        personNumber: "19900101-1234",
-        phone: "+46701234567",
-        address: "Test Street 1",
-        role: "ADMIN",
-      },
+    await testPrisma.user.deleteMany({
+      where: { role: "STUDENT" },
     });
-  });
-
-  afterAll(async () => {
-    await testPrisma.grade.deleteMany();
-    await testPrisma.user.deleteMany();
     await testPrisma.course.deleteMany();
-    await testPrisma.$disconnect();
   });
 
   it("should register a student with valid data", async () => {
@@ -270,30 +226,10 @@ describe("DELETE /admins/students/:id", () => {
 
   beforeEach(async () => {
     await testPrisma.grade.deleteMany();
-    await testPrisma.user.deleteMany();
-    await testPrisma.course.deleteMany();
-
-    await testPrisma.user.upsert({
-      where: { id: TEST_ADMIN_ID },
-      update: {},
-      create: {
-        id: TEST_ADMIN_ID,
-        email: "admin@test.com",
-        firstName: "Test",
-        lastName: "Admin",
-        personNumber: "19900101-1234",
-        phone: "+46701234567",
-        address: "Test Street 1",
-        role: "ADMIN",
-      },
+    await testPrisma.user.deleteMany({
+      where: { role: "STUDENT" },
     });
-  });
-
-  afterAll(async () => {
-    await testPrisma.grade.deleteMany();
-    await testPrisma.user.deleteMany();
     await testPrisma.course.deleteMany();
-    await testPrisma.$disconnect();
   });
 
   it("should delete a student successfully", async () => {
