@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import { testPrisma } from "../testClient";
+import type { User } from "@prisma/client";
 
 // Firebase is "mocked" so that we don't make actual calls to Firebase during tests
 jest.mock("firebase-admin", () => ({
@@ -84,7 +85,7 @@ describe("GET /admins/students", () => {
       .expect(200);
 
     expect(response.body.users).toHaveLength(2);
-    expect(response.body.users.every((u: any) => u.role === "STUDENT")).toBe(true);
+    expect(response.body.users.every((u: User) => u.role === "STUDENT")).toBe(true);
     expect(response.body.users[0]).toHaveProperty("firstName");
     expect(response.body.users[0]).toHaveProperty("grades");
   });
