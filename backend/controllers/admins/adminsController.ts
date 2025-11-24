@@ -119,6 +119,17 @@ export const deleteStudent = async (req: Request, res: Response) => {
       });
     }
 
+    const protectedStudentIds = [
+      "BMDeWpyRqHTvHulBD85QRGsbTed2", // Erik
+      "rSYJICHffYeZ5fAGqzFpbbaVyjt2", // Anna
+      "hGWeaVzLkjcnOlPpEOcEo1QFEq42", // Lars
+      "Bl11qu3yEuZBKMtx6NK9VwsHn963", // Maria
+      "RxH5xFzCGBVMRVfMRujKK43gRBr2", // Johan
+    ];
+
+    if (protectedStudentIds.includes(validatedId.data)) {
+      return res.status(403).json({ error: "Cannot delete a protected student" });
+    }
     const existingUser = await prisma.user.findUnique({
       where: { id: validatedId.data },
     });
