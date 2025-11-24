@@ -38,10 +38,10 @@ export const getStudents = async (req: Request, res: Response) => {
       },
     });
     if (users.length === 0) {
-      return res.status(404).json({ error: "No students found", users });
+      return res.status(404).json({ error: "No students found", users: [] });
     }
 
-    return res.status(200).json({ message: "Fetched all students succesfully", data: users });
+    return res.status(200).json({ message: "Fetched all students succesfully", users });
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).json({ error: "Failed to fetch students" });
@@ -91,7 +91,7 @@ export const registerStudent = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(201).json({ message: "Student created successfully", data: user });
+    res.status(201).json({ message: "Student created successfully", user });
   } catch (error) {
     if (firebaseUser && firebaseUser.uid) {
       try {
@@ -137,7 +137,7 @@ export const deleteStudent = async (req: Request, res: Response) => {
       console.error("Failed to delete Firebase user:", firebaseError);
     }
 
-    return res.status(200).json({ message: "Deleted student successfully", data: existingUser });
+    return res.status(200).json({ message: "Deleted student successfully", user: existingUser });
   } catch (error) {
     console.error("Error deleting student:", error);
     res.status(500).json({ error: "Failed to delete student" });

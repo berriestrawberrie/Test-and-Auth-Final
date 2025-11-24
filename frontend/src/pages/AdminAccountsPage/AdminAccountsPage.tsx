@@ -23,7 +23,7 @@ const AdminAccountsPage = () => {
     const handleStudentFetch = async () => {
       const fetchedStudents = await getStudents();
       if (fetchedStudents) {
-        setStudents(fetchedStudents.data);
+        setStudents(fetchedStudents.users);
       }
     };
     handleStudentFetch();

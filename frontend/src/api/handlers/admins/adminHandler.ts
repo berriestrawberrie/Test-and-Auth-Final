@@ -6,7 +6,7 @@ import { getCurrentUserToken } from "../../auth/token";
 const BACKEND_PORT = "3000";
 const BASE_URL = `http://localhost:${BACKEND_PORT}/admins`;
 
-export const getStudents = async (): Promise<{ message: string; data: StudentInterface[] } | undefined> => {
+export const getStudents = async (): Promise<{ message: string; users: StudentInterface[] } | undefined> => {
   try {
     const token = await getCurrentUserToken();
     const response = await axios.get(`${BASE_URL}/students`, {
