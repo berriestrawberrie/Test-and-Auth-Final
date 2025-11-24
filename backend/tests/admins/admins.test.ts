@@ -19,15 +19,15 @@ describe("GET /admins/students", () => {
 
   beforeEach(async () => {
     // Clean database completely before each test
-    await testPrisma.$transaction([
-      testPrisma.grade.deleteMany(),
-      testPrisma.user.deleteMany(),
-      testPrisma.course.deleteMany(),
-    ]);
+    await testPrisma.grade.deleteMany();
+    await testPrisma.user.deleteMany();
+    await testPrisma.course.deleteMany();
 
-    // Create the admin user fresh for each test
-    await testPrisma.user.create({
-      data: {
+    // Use upsert to avoid unique constraint errors
+    await testPrisma.user.upsert({
+      where: { id: "test-admin-uid" },
+      update: {},
+      create: {
         id: "test-admin-uid",
         email: "admin@test.com",
         firstName: "Test",
@@ -42,11 +42,9 @@ describe("GET /admins/students", () => {
 
   afterAll(async () => {
     // Final cleanup
-    await testPrisma.$transaction([
-      testPrisma.grade.deleteMany(),
-      testPrisma.user.deleteMany(),
-      testPrisma.course.deleteMany(),
-    ]);
+    await testPrisma.grade.deleteMany();
+    await testPrisma.user.deleteMany();
+    await testPrisma.course.deleteMany();
     await testPrisma.$disconnect();
   });
 
@@ -87,11 +85,12 @@ describe("GET /admins/students", () => {
       ],
     });
 
-    const response = await request(app)
-      .get("/admins/students")
-      .set("Authorization", `Bearer ${mockAdminToken}`)
-      .expect(200);
+    const response = await request(app).get("/admins/students").set("Authorization", `Bearer ${mockAdminToken}`);
 
+    console.log("Response status:", response.status);
+    console.log("Response body:", response.body);
+
+    expect(response.status).toBe(200);
     expect(response.body.users).toHaveLength(2);
     expect(response.body.users.every((u: User) => u.role === "STUDENT")).toBe(true);
     expect(response.body.users[0]).toHaveProperty("firstName");
@@ -100,16 +99,19 @@ describe("GET /admins/students", () => {
 
   it("should return 404 when no students exist", async () => {
     // Only the admin exists (created in beforeEach), no students
-    const response = await request(app)
-      .get("/admins/students")
-      .set("Authorization", `Bearer ${mockAdminToken}`)
-      .expect(404);
+    const response = await request(app).get("/admins/students").set("Authorization", `Bearer ${mockAdminToken}`);
 
+    console.log("Response status:", response.status);
+    console.log("Response body:", response.body);
+
+    expect(response.status).toBe(404);
     expect(response.body.message).toBe("No students found");
     expect(response.body.users).toHaveLength(0);
   });
 
   it("should return 401 without token", async () => {
-    await request(app).get("/admins/students").expect(401);
+    const response = await request(app).get("/admins/students");
+
+    expect(response.status).toBe(401);
   });
 });
