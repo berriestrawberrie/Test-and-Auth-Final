@@ -18,7 +18,6 @@ const RouteAuthenticator = ({ children, requiredRole }: Props) => {
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    console.log("Infinite loop?");
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
       try {
         if (!firebaseUser) {
