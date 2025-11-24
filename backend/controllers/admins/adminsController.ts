@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userCreationSchema } from "../../schemas/usersSchema";
+import { userCreationSchema, userIdSchema } from "../../schemas/usersSchema";
 import { prisma } from "../../prisma/client";
 import admin from "firebase-admin";
 
@@ -38,10 +38,10 @@ export const getStudents = async (req: Request, res: Response) => {
       },
     });
     if (users.length === 0) {
-      return res.status(404).json({ message: "No students found", users });
+      return res.status(404).json({ error: "No students found", users });
     }
 
-    return res.status(200).json({ message: "Fetched all students succesfully", users });
+    return res.status(200).json({ message: "Fetched all students succesfully", data: users });
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).json({ error: "Failed to fetch students" });
@@ -55,7 +55,12 @@ export const registerStudent = async (req: Request, res: Response) => {
   let firebaseUser: admin.auth.UserRecord | null = null;
   try {
     const validatedUser = userCreationSchema.safeParse(req.body);
-    if (!validatedUser.success) throw validatedUser.error;
+    if (!validatedUser.success) {
+      return res.status(400).json({
+        error: "Validation failed",
+        details: validatedUser.error,
+      });
+    }
 
     const { firstName, lastName, personNumber, phone, address, email, password } = validatedUser.data;
 
@@ -86,7 +91,7 @@ export const registerStudent = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(201).json({ message: "Student created successfully", user });
+    res.status(201).json({ message: "Student created successfully", data: user });
   } catch (error) {
     if (firebaseUser && firebaseUser.uid) {
       try {
@@ -98,5 +103,43 @@ export const registerStudent = async (req: Request, res: Response) => {
     }
     console.error("Registration error:", error);
     res.status(500).json({ error: "Failed to create student" });
+  }
+};
+
+// @desc: delete a student by ID.
+// @method: DELETE
+// @route /admins/students/:id
+export const deleteStudent = async (req: Request, res: Response) => {
+  try {
+    const validatedId = userIdSchema.safeParse(req.params.id);
+    if (!validatedId.success) {
+      return res.status(400).json({
+        error: "Invalid ID format",
+        details: validatedId.error,
+      });
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: validatedId.data },
+    });
+
+    if (!existingUser || existingUser.role !== "STUDENT") {
+      return res.status(404).json({ error: "No student found with the provided ID" });
+    }
+
+    await prisma.user.delete({
+      where: { id: validatedId.data },
+    });
+
+    try {
+      await admin.auth().deleteUser(validatedId.data);
+    } catch (firebaseError) {
+      console.error("Failed to delete Firebase user:", firebaseError);
+    }
+
+    return res.status(200).json({ message: "Deleted student successfully", data: existingUser });
+  } catch (error) {
+    console.error("Error deleting student:", error);
+    res.status(500).json({ error: "Failed to delete student" });
   }
 };

@@ -10,6 +10,12 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const user = await prisma.user.findUnique({
       where: { id: uid },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+      },
     });
     if (!user) throw Error("No user found");
 
