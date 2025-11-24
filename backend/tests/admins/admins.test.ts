@@ -1,9 +1,3 @@
-import request from "supertest";
-import { app } from "../../app";
-import { testPrisma } from "../testClient";
-import type { User } from "@prisma/client";
-
-const TEST_ADMIN_ID = "adminAdminAdminAdminAdmin123";
 // Firebase is "mocked" so that we don't make actual calls to Firebase during tests
 jest.mock("firebase-admin", () => ({
   auth: jest.fn().mockReturnValue({
@@ -18,6 +12,13 @@ jest.mock("firebase-admin", () => ({
   }),
   initializeApp: jest.fn(),
 }));
+
+import request from "supertest";
+import { app } from "../../app";
+import { testPrisma } from "../testClient";
+import type { User } from "@prisma/client";
+
+const TEST_ADMIN_ID = "adminAdminAdminAdminAdmin123";
 
 describe("GET /admins/students", () => {
   const mockAdminToken = "mock-admin-token";
