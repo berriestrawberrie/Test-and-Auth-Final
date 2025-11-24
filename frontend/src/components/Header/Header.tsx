@@ -27,7 +27,7 @@ const Header: React.FC = () => {
         <button className="header__logout-button" onClick={handleLogout}>
           <img
             className="header__logout-icon"
-            src="./assets/icons/logout.svg"
+            src="/assets/icons/logout.svg"
             alt="An arrow coming out of a c-shape. Symbol of logout"
           />
           <span className="header__logout-text">{`${user.firstName} ${user.lastName}`}</span>
