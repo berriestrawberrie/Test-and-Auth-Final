@@ -45,7 +45,6 @@ const StudentPage: React.FC<Props> = ({ title }) => {
           title1={"Course"}
           title2={"Grade"}
           title3={"Year"}
-          isExpand={false}
           studentData={studentData}
           selectedYear={selectedYear}
           selectedCourse={selectedCourse}
