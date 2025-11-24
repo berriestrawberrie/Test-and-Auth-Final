@@ -22,8 +22,8 @@ model User {
   personNumber String   @unique
   phone        String
   address      String
-  grades       Grade[]
   createdAt    DateTime @default(now())
+  grades       Grade[]  @relation("StudentGrades")
 }
 
 enum UserRole {
@@ -41,15 +41,14 @@ enum GradeValue {
 
 model Grade {
   id        Int        @id @default(autoincrement())
-  student   User       @relation(fields: [studentId], references: [id])
   studentId String
   grade     GradeValue
   year      Int
   date      DateTime
-  course    Course     @relation(fields: [courseId], references: [id])
   courseId  Int
+  student   User       @relation("StudentGrades", fields: [studentId], references: [id], onDelete: Cascade)
+  course    Course     @relation(fields: [courseId], references: [id])
 
-  //Improves query performance 
   @@index([studentId])
   @@index([courseId])
 }

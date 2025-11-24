@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import type { loggedInUserInterface } from "../interfaces/userInterfaces";
+import type { LoggedInUserInterface } from "../interfaces/userInterfaces";
 
 interface UserStore {
-  user: loggedInUserInterface | null;
+  user: LoggedInUserInterface | null;
   setUser: (
-    user: loggedInUserInterface | null | ((prev: loggedInUserInterface | null) => loggedInUserInterface | null)
+    user: LoggedInUserInterface | null | ((prev: LoggedInUserInterface | null) => LoggedInUserInterface | null)
   ) => void;
 }
 const useUserStore = create<UserStore>((set) => ({
