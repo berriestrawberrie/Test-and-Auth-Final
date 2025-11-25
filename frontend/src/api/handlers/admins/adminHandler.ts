@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { StudentInterface, UserCreationWithPasswordInterface } from "../../../interfaces/userInterfaces";
-import { userCreationSchema } from "../../../schemas/usersSchema";
+import { userCreationSchema, userIdSchema, userUpdateSchema, type UserUpdateInput } from "../../../schemas/usersSchema";
 import { getCurrentUserToken } from "../../auth/token";
 
 const BACKEND_PORT = "3000";
@@ -43,8 +43,33 @@ export const registerStudent = async (userInfo: UserCreationWithPasswordInterfac
 
 export const deleteStudent = async (id: string) => {
   try {
+    const validatedId = userIdSchema.safeParse(id);
+    if (!validatedId.success) throw validatedId.error;
+
     const token = await getCurrentUserToken();
     const response = await axios.delete(`${BASE_URL}/students/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const editStudent = async (id: string, userUpdateData: UserUpdateInput) => {
+  try {
+    const validatedId = userIdSchema.safeParse(id);
+    if (!validatedId.success) throw validatedId.error;
+
+    const validatedUpdateData = userUpdateSchema.safeParse(userUpdateData);
+    if (!validatedUpdateData.success) throw validatedUpdateData.error;
+
+    const token = await getCurrentUserToken();
+    const response = await axios.put(`${BASE_URL}/students/${id}`, validatedUpdateData.data, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

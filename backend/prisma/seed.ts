@@ -36,7 +36,7 @@ async function seed() {
       role: UserRole.STUDENT,
     },
     {
-      id: "GxHtWaknTZd9nVgkUZiBwpXZV1E2",
+      id: "hGWeaVzLkjcnOlPpEOcEo1QFEq42",
       firstName: "Lars",
       lastName: "Nilsson",
       email: "lars@email.com",
@@ -46,7 +46,7 @@ async function seed() {
       role: UserRole.STUDENT,
     },
     {
-      id: "OqyGoAAtBrf8cZVX74nZpb0hphJ3",
+      id: "Bl11qu3yEuZBKMtx6NK9VwsHn963",
       firstName: "Maria",
       lastName: "Bergström",
       email: "maria@email.com",
@@ -56,7 +56,7 @@ async function seed() {
       role: UserRole.STUDENT,
     },
     {
-      id: "NADrXFLzJeQzhyk8LPNeX4IsVQs1",
+      id: "RxH5xFzCGBVMRVfMRujKK43gRBr2",
       firstName: "Johan",
       lastName: "Lindqvist",
       email: "johan@email.com",
@@ -93,7 +93,6 @@ async function seed() {
               courseId: course.id,
               grade: getRandomGrade(),
               year,
-              date: new Date(`202${year}-06-15`),
             },
           });
         }
