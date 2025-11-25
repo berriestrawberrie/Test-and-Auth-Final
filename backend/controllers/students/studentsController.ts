@@ -28,7 +28,7 @@ export const getStudent = async (req: Request, res: Response) => {
           select: {
             id: true,
             year: true,
-            date: true,
+            createdAt: true,
             grade: true,
             course: {
               select: {

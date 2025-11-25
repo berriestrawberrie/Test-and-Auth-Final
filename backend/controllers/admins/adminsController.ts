@@ -24,7 +24,7 @@ export const getStudents = async (req: Request, res: Response) => {
           select: {
             id: true,
             year: true,
-            date: true,
+            createdAt: true,
             grade: true,
             course: {
               select: {
@@ -259,5 +259,19 @@ export const editStudent = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error updating student:", error);
     res.status(500).json({ error: "Failed to update student" });
+  }
+};
+// @desc: add a grade to a student by ID. --- NOT IMPLEMENTED ---
+// @method: POST
+// @params: id
+// @body: { courseId: string, grade: "A"|"B"|"C"|"D"|"F", date: string, year: number }
+// @route /admins/students/:id/grades
+export const addGradeToStudent = async (req: Request, res: Response) => {
+  const validatedId = userIdSchema.safeParse(req.params.id);
+  if (!validatedId.success) {
+    return res.status(400).json({
+      error: "Invalid ID format",
+      details: validatedId.error,
+    });
   }
 };
