@@ -195,7 +195,15 @@ export const editStudent = async (req: Request, res: Response) => {
 
     if (firstName && firstName !== existingUser.firstName) dataToUpdate.firstName = firstName.trim();
     if (lastName && lastName !== existingUser.lastName) dataToUpdate.lastName = lastName.trim();
-    if (personNumber && personNumber !== existingUser.personNumber) dataToUpdate.personNumber = personNumber.trim(); //TODO: FIX OR REMOVE UNIQUE CONSTRAINT!
+    if (personNumber && personNumber !== existingUser.personNumber) {
+      const personNumberExists = await prisma.user.findUnique({
+        where: { personNumber },
+      });
+      if (personNumberExists) {
+        return res.status(409).json({ error: "Person number is already in use by another user" });
+      }
+      dataToUpdate.personNumber = personNumber.trim();
+    }
     if (address && address !== existingUser.address) dataToUpdate.address = address.trim();
     if (phone && phone !== existingUser.phone) dataToUpdate.phone = phone.trim();
     if (email && email !== existingUser.email) {
