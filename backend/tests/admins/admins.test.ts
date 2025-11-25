@@ -9,7 +9,7 @@ jest.mock("firebase-admin", () => ({
       uid: "new-student-uid",
     }),
     deleteUser: jest.fn().mockResolvedValue(undefined),
-    updateUser: jest.fn().mockResolvedValue(undefined), // ✅ Add this
+    updateUser: jest.fn().mockResolvedValue(undefined),
   }),
   initializeApp: jest.fn(),
 }));
