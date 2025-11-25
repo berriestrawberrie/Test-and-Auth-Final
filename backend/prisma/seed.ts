@@ -93,7 +93,6 @@ async function seed() {
               courseId: course.id,
               grade: getRandomGrade(),
               year,
-              date: new Date(`202${year}-06-15`),
             },
           });
         }
