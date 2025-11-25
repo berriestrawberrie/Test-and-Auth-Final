@@ -19,7 +19,7 @@ export const baseUserSchema = z.object({
     .email()
     .min(4, "Email must be at least 4 characters long")
     .max(50, "Email must be at most 50 characters long"),
-  personNumber: z.string().regex(/^\d{8}-\d{4}$/, "Person number must be in format YYYYMMDD-XXXX"),
+  personNumber: z.string().regex(/^\d{8}-\d{4}$/, "Person number must be in format YYYYMMDD-XXXX"), // TODO: REMOVE THIS? UNIQUE CONSTRAINT ISSUES
   phone: z
     .string()
     .min(10, "Phone number must be at least 10 characters long")
