@@ -21,8 +21,7 @@ const AdminAccountsPage = () => {
   const [students, setStudents] = useState<StudentInterface[]>([]);
   //FILTER YEAR
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  //FILTER COURSES
-  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(
     null
   );
@@ -83,7 +82,7 @@ const AdminAccountsPage = () => {
         isSubject={false}
         selectedYear={selectedYear}
         setSelectedYear={setSelectedYear}
-        setSelectedCourse={setSelectedCourse}
+        setSelectedCourse={() => {}}
       />
       <AccountTable multiData={students} onRowClick={handleRowClick} />
 
