@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   deleteStudent,
   getStudents,
+  editStudent,
 } from "../../api/handlers/admins/adminHandler";
 import type {
   StudentInterface,
@@ -11,6 +12,10 @@ import type {
 import AccountTable from "../../components/Table/AccountTable";
 import Filter from "../../components/Filter/Filter";
 import Modal from "../../components/Modal/Modal";
+import { userUpdateSchema } from "../../schemas/usersSchema";
+import type { z } from "zod";
+
+type UserUpdateInput = z.infer<typeof userUpdateSchema>;
 
 const AdminAccountsPage = () => {
   const [students, setStudents] = useState<StudentInterface[]>([]);
@@ -18,18 +23,20 @@ const AdminAccountsPage = () => {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   //FILTER COURSES
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(
+    null
+  );
   //OPEN THE MODAL
-  const [selectedStudent, setSelectedStudent] =
-    useState<BaseUserInterface | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const selectedStudent = students.find((s) => s.id === selectedStudentId);
 
   const handleRowClick = (student: BaseUserInterface) => {
-    setSelectedStudent(student);
+    setSelectedStudentId(student.id);
     setIsModalOpen(true);
   };
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedStudent(null);
+    setSelectedStudentId(null);
   };
 
   const handleDeleteStudent = async (id: string, studentName: string) => {
@@ -50,7 +57,7 @@ const AdminAccountsPage = () => {
       alert("Failed to delete student. Please try again.");
     }
   };
-  console.log(isModalOpen);
+
   useEffect(() => {
     const handleStudentFetch = async () => {
       const fetchedStudents = await getStudents();
@@ -60,6 +67,14 @@ const AdminAccountsPage = () => {
     };
     handleStudentFetch();
   }, []);
+
+  const handleStudentUpdate = async (id: string, data: UserUpdateInput) => {
+    const updatedStudent = await editStudent(id, data);
+    setStudents((prev) =>
+      prev.map((s) => (s.id === updatedStudent.id ? updatedStudent : s))
+    );
+  };
+
   return (
     <div>
       <Filter
@@ -70,7 +85,14 @@ const AdminAccountsPage = () => {
       />
       <AccountTable multiData={students} onRowClick={handleRowClick} />
 
-      {isModalOpen && <Modal handleClose={closeModal} />}
+      {isModalOpen && selectedStudent && (
+        <Modal
+          selectedStudent={selectedStudent}
+          handleClose={closeModal}
+          handleDelete={handleDeleteStudent}
+          handleStudentUpdate={handleStudentUpdate}
+        />
+      )}
     </div>
   );
 };

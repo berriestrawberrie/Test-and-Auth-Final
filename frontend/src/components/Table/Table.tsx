@@ -86,7 +86,7 @@ const Table: React.FC<Props> = ({
                   <tr key={grade.id}>
                     <td>{student.firstName + " " + student.lastName}</td>
                     <td>{grade.grade}</td>
-                    <td>{new Date(grade.date).toLocaleDateString()}</td>
+                    <td>{new Date(grade.createdAt).toLocaleDateString()}</td>
                   </tr>
                 ))
               )}
