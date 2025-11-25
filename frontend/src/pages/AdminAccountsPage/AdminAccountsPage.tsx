@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { addGradeToStudent, deleteStudent, getStudents } from "../../api/handlers/admins/adminHandler";
+import { deleteStudent, getStudents } from "../../api/handlers/admins/adminHandler";
 import type { StudentInterface } from "../../interfaces/userInterfaces";
-import type { GradeCreationInput } from "../../schemas/gradesSchema";
 
 const AdminAccountsPage = () => {
   const [students, setStudents] = useState<StudentInterface[]>([]);
@@ -20,17 +19,6 @@ const AdminAccountsPage = () => {
       alert("Failed to delete student. Please try again.");
     }
   };
-  const handleAddGrade = async (studentId: string, gradeData: GradeCreationInput) => {
-    try {
-      // Assuming addGradeToStudent is imported from adminHandler
-      const response = await addGradeToStudent(studentId, gradeData);
-      console.log(response);
-      alert("Grade added successfully!");
-    } catch (error) {
-      console.error("Failed to add grade:", error);
-      alert("Failed to add grade. Please try again.");
-    }
-  };
   useEffect(() => {
     const handleStudentFetch = async () => {
       const fetchedStudents = await getStudents();
@@ -46,7 +34,7 @@ const AdminAccountsPage = () => {
         <li
           key={student.id}
           style={{ cursor: "pointer", padding: "1rem", marginBlock: "0.5rem", border: "1px solid #ccc" }}
-          onClick={() => handleAddGrade(student.id, { courseId: 1, grade: "A", year: 1 })}>
+          onClick={() => handleDeleteStudent(student.id, `${student.firstName} ${student.lastName}`)}>
           {student.email}
         </li>
       ))}
