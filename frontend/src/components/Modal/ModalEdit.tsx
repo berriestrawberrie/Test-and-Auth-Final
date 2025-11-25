@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import { userUpdateSchema } from "../../schemas/usersSchema";
-import type { BaseUserInterface } from "../../interfaces/userInterfaces";
+import type { StudentInterface } from "../../interfaces/userInterfaces";
 import type { z } from "zod";
 
 type UserUpdateInput = z.infer<typeof userUpdateSchema>;
 
 interface ModalEditProps {
-  selectedStudent: BaseUserInterface;
+  selectedStudentId: string | null;
   setIsEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleStudentUpdate: (id: string, data: UserUpdateInput) => Promise<void>;
+  students: StudentInterface[];
 }
 
 export const ModalEdit: React.FC<ModalEditProps> = ({
-  selectedStudent,
+  selectedStudentId,
   setIsEditOpen,
   handleStudentUpdate,
+  students,
 }) => {
   const [formData, setFormData] = useState<UserUpdateInput>({});
+  const selectedStudent = students.find((s) => s.id === selectedStudentId)!;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -39,11 +42,13 @@ export const ModalEdit: React.FC<ModalEditProps> = ({
     //PROCEED WITH UPDATE
     try {
       await handleStudentUpdate(selectedStudent.id, formData);
+
       setIsEditOpen(false);
     } catch (error: unknown) {
       console.error("Failed to update student:", error);
     }
   };
+
   return (
     <form onSubmit={handleSubmit} className="modal-form">
       <fieldset>
@@ -105,7 +110,7 @@ export const ModalEdit: React.FC<ModalEditProps> = ({
         </div>
       </fieldset>
       <div className="modal-actions">
-        <button>Save</button>
+        <button type="submit">Save</button>
         <button onClick={() => setIsEditOpen(false)}>Cancel</button>
       </div>
     </form>

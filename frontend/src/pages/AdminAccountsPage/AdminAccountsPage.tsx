@@ -28,7 +28,7 @@ const AdminAccountsPage = () => {
   );
   //OPEN THE MODAL
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const selectedStudent = students.find((s) => s.id === selectedStudentId);
+  const selectedStudent = students;
 
   const handleRowClick = (student: BaseUserInterface) => {
     setSelectedStudentId(student.id);
@@ -71,7 +71,9 @@ const AdminAccountsPage = () => {
   const handleStudentUpdate = async (id: string, data: UserUpdateInput) => {
     const updatedStudent = await editStudent(id, data);
     setStudents((prev) =>
-      prev.map((s) => (s.id === updatedStudent.id ? updatedStudent : s))
+      prev.map((s) =>
+        s.id === updatedStudent.user.id ? updatedStudent.user : s
+      )
     );
   };
 
@@ -87,10 +89,11 @@ const AdminAccountsPage = () => {
 
       {isModalOpen && selectedStudent && (
         <Modal
-          selectedStudent={selectedStudent}
+          selectedStudentId={selectedStudentId}
           handleClose={closeModal}
           handleDelete={handleDeleteStudent}
           handleStudentUpdate={handleStudentUpdate}
+          students={students}
         />
       )}
     </div>

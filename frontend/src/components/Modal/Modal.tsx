@@ -1,9 +1,6 @@
 import "./modal.css";
 import { useState } from "react";
-import type {
-  StudentInterface,
-  BaseUserInterface,
-} from "../../interfaces/userInterfaces";
+import type { StudentInterface } from "../../interfaces/userInterfaces";
 import { ModalEdit } from "./ModalEdit";
 import { userUpdateSchema } from "../../schemas/usersSchema";
 import type { z } from "zod";
@@ -12,21 +9,20 @@ type UserUpdateInput = z.infer<typeof userUpdateSchema>;
 interface Props {
   handleClose: () => void;
   handleDelete: (id: string, studentName: string) => void;
-  selectedStudent: BaseUserInterface;
+  selectedStudentId: string | null;
   handleStudentUpdate: (id: string, data: UserUpdateInput) => Promise<void>;
+  students: StudentInterface[];
 }
 
 const Modal: React.FC<Props> = ({
   handleClose,
-  selectedStudent,
+  selectedStudentId,
   handleDelete,
   handleStudentUpdate,
+  students,
 }) => {
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
-
-  const openForm = () => {
-    setIsEditOpen(!isEditOpen);
-  };
+  const selectedStudent = students.find((s) => s.id === selectedStudentId);
 
   return (
     <div className="modal">
@@ -39,14 +35,15 @@ const Modal: React.FC<Props> = ({
         {isEditOpen && (
           <>
             <ModalEdit
-              selectedStudent={selectedStudent}
+              selectedStudentId={selectedStudentId}
               setIsEditOpen={setIsEditOpen}
               handleStudentUpdate={handleStudentUpdate}
+              students={students}
             />
           </>
         )}
 
-        {!isEditOpen && (
+        {!isEditOpen && selectedStudent && (
           <>
             <h4>
               {selectedStudent.firstName + " " + selectedStudent.lastName}
@@ -68,7 +65,7 @@ const Modal: React.FC<Props> = ({
             </div>
 
             <div className="modal-actions">
-              <button onClick={openForm}>Edit</button>
+              <button onClick={() => setIsEditOpen(!isEditOpen)}>Edit</button>
               <button
                 onClick={() =>
                   handleDelete(
