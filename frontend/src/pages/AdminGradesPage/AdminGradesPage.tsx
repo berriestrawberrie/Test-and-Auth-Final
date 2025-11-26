@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
-import { getStudents } from "../../api/handlers/admins/adminHandler";
+import {
+  getStudents,
+  addGradeToStudent,
+} from "../../api/handlers/admins/adminHandler";
 import type { StudentInterface } from "../../interfaces/userInterfaces";
 import Table from "../../components/Table/Table";
 import Filter from "../../components/Filter/Filter";
 import Button from "../../components/Button/Button";
 import ModalGrade from "../../components/Modal/ModalGrade";
+import { gradeCreationSchema } from "../../schemas/gradesSchema";
+import type { z } from "zod";
+
+type GradeCreationInput = z.infer<typeof gradeCreationSchema>;
 
 const AdminGradesPage = () => {
   //FILTER YEAR
@@ -23,9 +30,10 @@ const AdminGradesPage = () => {
     handleStudentFetch();
   }, []);
 
-  useEffect(() => {
-    console.log(students);
-  }, [students]);
+  const handleSaveGrade = async (id: string, gradeData: GradeCreationInput) => {
+    const updatedGrade = await addGradeToStudent(id, gradeData);
+    console.log(updatedGrade);
+  };
 
   return (
     <div>
@@ -43,6 +51,7 @@ const AdminGradesPage = () => {
         <ModalGrade
           students={students}
           handleClose={() => setIsModalOpen(false)}
+          handleSaveGrade={handleSaveGrade}
         />
       )}
       <Table

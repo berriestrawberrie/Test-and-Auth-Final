@@ -5,23 +5,28 @@ import type {
   StudentInterface,
   BaseUserInterface,
 } from "../../interfaces/userInterfaces";
-import type { z } from "zod";
+import { z } from "zod";
 
 type GradeCreationInput = z.infer<typeof gradeCreationSchema>;
 interface Props {
   handleClose: () => void;
   students: StudentInterface[];
+  handleSaveGrade: (id: string, data: GradeCreationInput) => Promise<void>;
 }
 
-const ModalGrade: React.FC<Props> = ({ handleClose, students }) => {
+const ModalGrade: React.FC<Props> = ({
+  handleClose,
+  students,
+  handleSaveGrade,
+}) => {
   const [formData, setFormData] = useState<GradeCreationInput>({
     courseId: 1,
-    grade: "A",
     year: 1,
+    grade: "A",
   });
   const gradeOptions = gradeCreationSchema.shape.grade.options;
   const yearOptions = gradeCreationSchema.shape.year.options.map(
-    (opt) => (opt as z.ZodLiteral<any>).value
+    (opt) => (opt as z.ZodLiteral<number>).value
   );
   const [year, setYear] = useState<number>(1);
   const [courseId, setCourseId] = useState<number>(1);
@@ -40,6 +45,33 @@ const ModalGrade: React.FC<Props> = ({ handleClose, students }) => {
 
     return match?.grade;
   }
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "year" || name === "courseId" ? Number(value) : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    //CHECK IF GRADE IS DIFFERENT
+    const checkGrade = getGradeForStudent(
+      studentId,
+      formData.year,
+      formData.courseId
+    );
+    if (String(checkGrade) === String(formData.grade)) {
+      alert("You cannot save the same grade again.");
+      return;
+    }
+    try {
+      console.log(studentId, formData);
+      await handleSaveGrade(studentId, formData);
+    } catch (error: unknown) {
+      console.error("Failed to save grade:", error);
+    }
+  };
 
   return (
     <div className="modal">
@@ -63,16 +95,19 @@ const ModalGrade: React.FC<Props> = ({ handleClose, students }) => {
           onClick={handleClose}
           src="/assets/icons/close.svg"
         />
-        <form className="modal-form">
+        <form onSubmit={handleSubmit} className="modal-form">
           <fieldset>
             <div>
               <label>Student</label>
               <select
                 name="student"
-                value={studentId}
                 onChange={(e) => setStudentId(e.target.value)}
+                required
               >
-                <option>Select Student</option>
+                <option value="" disabled selected>
+                  Select Student
+                </option>
+
                 {students.map((student: BaseUserInterface) => (
                   <option key={student.id} value={student.id}>
                     {student.firstName + " " + student.lastName}
@@ -84,9 +119,15 @@ const ModalGrade: React.FC<Props> = ({ handleClose, students }) => {
               <label>Year</label>
               <select
                 name="year"
-                value={year}
-                onChange={(e) => setYear(Number(e.target.value))}
+                onChange={(e) => {
+                  setYear(Number(e.target.value));
+                  handleChange(e);
+                }}
+                required
               >
+                <option value="" disabled selected>
+                  Select Year
+                </option>
                 {yearOptions.map((year) => (
                   <option key={year} value={year}>
                     {year}
@@ -100,10 +141,15 @@ const ModalGrade: React.FC<Props> = ({ handleClose, students }) => {
               <label>Course</label>
               <select
                 name="courseId"
-                value={courseId}
-                onChange={(e) => setCourseId(Number(e.target.value))}
+                onChange={(e) => {
+                  setCourseId(Number(e.target.value));
+                  handleChange(e);
+                }}
+                required
               >
-                <option value="-1">Select Course</option>
+                <option value="" disabled selected>
+                  Select Course
+                </option>
                 <option value="1">Math</option>
                 <option value="2">Art</option>
                 <option value="3">History</option>
@@ -111,8 +157,10 @@ const ModalGrade: React.FC<Props> = ({ handleClose, students }) => {
             </div>
             <div>
               <label>Update Grade</label>
-              <select name="grade">
-                <option>Select Grade</option>
+              <select name="grade" onChange={handleChange} required>
+                <option value="" disabled selected>
+                  Select Grade
+                </option>
                 {gradeOptions.map((grade) => (
                   <option key={grade} value={grade}>
                     {grade}

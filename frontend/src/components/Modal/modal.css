@@ -71,7 +71,6 @@
   display: block;
 }
 .modal-form select {
-  border: 1px solid red;
   width: 120px;
   text-align: center;
 }
