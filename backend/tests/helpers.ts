@@ -98,11 +98,3 @@ export const clearTestData = async () => {
   await testPrisma.user.deleteMany({ where: { role: "STUDENT" } });
   await testPrisma.course.deleteMany();
 };
-
-/*
-Usage examples:
-  await clearTestData();
-  const student = await createStudent();
-  const course = await createCourse({ id: 1 });
-  await createGrade({ studentId: student.id, courseId: course.id, grade: "A", year: 2 });
-*/
