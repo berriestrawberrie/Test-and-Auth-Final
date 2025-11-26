@@ -15,7 +15,7 @@ describe("PUT /admins/students/:id", () => {
     await clearTestData();
   });
 
-  // ✅ SUCCESS CASES
+  //@ SUCCESS TESTS
   it("should update student with valid data", async () => {
     const testStudent = await createStudent();
 
@@ -93,7 +93,7 @@ describe("PUT /admins/students/:id", () => {
     expect(response.body.user.lastName).toBe("Student");
   });
 
-  // ✅ EMAIL UPDATE CASES
+  //@ EMAIL TESTS
   it("should update email successfully", async () => {
     const testStudent = await createStudent();
 
@@ -142,7 +142,7 @@ describe("PUT /admins/students/:id", () => {
     expect(response.body.error).toBe("Email is already in use by another user");
   });
 
-  // ✅ VALIDATION ERRORS
+  //@ VALIDATION TESTS
   it("should return 400 with invalid ID format", async () => {
     const updateData = {
       firstName: "Test",
@@ -204,7 +204,7 @@ describe("PUT /admins/students/:id", () => {
     expect(response.body.error).toBe("Validation failed");
   });
 
-  // ✅ NOT FOUND CASES
+  //@ NOT FOUND TESTS
   it("should return 404 when student does not exist", async () => {
     const updateData = {
       firstName: "Test",
@@ -233,7 +233,7 @@ describe("PUT /admins/students/:id", () => {
     expect(response.body.error).toBe("No student found with the provided ID");
   });
 
-  // ✅ AUTH TESTS
+  //@ AUTHENTICATION TESTS
   it("should return 401 without token", async () => {
     const updateData = {
       firstName: "Test",

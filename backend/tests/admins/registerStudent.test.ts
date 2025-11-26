@@ -8,6 +8,7 @@ describe("POST /admins/register", () => {
     await clearTestData();
   });
 
+  //@ SUCCESS TESTS
   it("should register a student with valid data", async () => {
     const studentData = {
       firstName: "New",
@@ -29,7 +30,7 @@ describe("POST /admins/register", () => {
     expect(response.body.user.email).toBe(studentData.email);
   });
 
-  // VALIDATION TESTS
+  //@ VALIDATION TESTS
   it("should return 400 with invalid email", async () => {
     const invalidData = {
       firstName: "Test",
@@ -91,6 +92,7 @@ describe("POST /admins/register", () => {
     expect(response.body).toHaveProperty("error");
   });
 
+  //@ CONFLICT TESTS
   it("should return 409 when student already exists", async () => {
     const studentData = {
       firstName: "Existing",

@@ -9,8 +9,8 @@ describe("DELETE /admins/students/:id", () => {
     await clearTestData();
   });
 
+  //@ SUCCESS TEST
   it("should delete a student successfully", async () => {
-    // Create a student to delete
     const testStudent = await createStudent();
 
     const response = await request(app)
@@ -27,7 +27,7 @@ describe("DELETE /admins/students/:id", () => {
     expect(deletedStudent).toBeNull();
   });
 
-  // VALIDATION TESTS
+  //@ VALIDATION TESTS
   it("should return 400 with invalid ID format", async () => {
     const response = await request(app)
       .delete("/admins/students/invalid-id") // ❌ Not 28 chars
@@ -37,6 +37,7 @@ describe("DELETE /admins/students/:id", () => {
     expect(response.body).toHaveProperty("error");
   });
 
+  //@ 404 NOT FOUND TESTS
   it("should return 404 when student does not exist", async () => {
     const response = await request(app)
       .delete(`/admins/students/${noneExistentStudentId}`)
@@ -55,6 +56,7 @@ describe("DELETE /admins/students/:id", () => {
     expect(response.body.error).toBe("No student found with the provided ID");
   });
 
+  //@ AUTHENTICATION TESTS
   it("should return 401 without token", async () => {
     const response = await request(app).delete("/admins/students/mIXXxZONilPmVuoTKPrwi4RPL722");
 

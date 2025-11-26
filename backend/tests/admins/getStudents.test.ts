@@ -9,6 +9,7 @@ describe("GET /admins/students", () => {
     await clearTestData();
   });
 
+  //@ SUCCESS TESTS
   it("should return only students, not admins", async () => {
     await createManyStudents(2);
 
@@ -21,6 +22,7 @@ describe("GET /admins/students", () => {
     expect(response.body.users[0]).toHaveProperty("grades");
   });
 
+  //@ 404 NOT FOUND TESTS
   it("should return 404 when no students exist", async () => {
     const response = await request(app).get("/admins/students").set("Authorization", `Bearer ${mockAdminToken}`);
 
@@ -29,6 +31,7 @@ describe("GET /admins/students", () => {
     expect(response.body.users).toHaveLength(0);
   });
 
+  //@ AUTHENTICATION TESTS
   it("should return 401 without token", async () => {
     const response = await request(app).get("/admins/students");
     expect(response.status).toBe(401);

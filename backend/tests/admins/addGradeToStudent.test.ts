@@ -8,6 +8,7 @@ describe("POST /admins/students/:id/grades", () => {
     await clearTestData();
   });
 
+  //@ VALIDATION TESTS
   it("should return 400 with invalid ID format", async () => {
     const response = await request(app)
       .post("/admins/students/invalid-id/grades")
@@ -28,6 +29,7 @@ describe("POST /admins/students/:id/grades", () => {
     expect(response.body.error).toBe("Invalid grade data");
   });
 
+  //@ 404 NOT FOUND TESTS
   it("should return 404 and no student found", async () => {
     const response = await request(app)
       .post(`/admins/students/${generateFirebaseUid()}/grades`)
@@ -53,7 +55,8 @@ describe("POST /admins/students/:id/grades", () => {
     expect(response.body.error).toBe("Course not found");
   });
 
-  it("should return 401 with no admin authorization", async () => {
+  //@ AUTHENTICATION TESTS
+  it("should return 401 with unauthorized", async () => {
     const testStudent = await createStudent();
     const testCourse = await createCourse();
 
@@ -65,6 +68,7 @@ describe("POST /admins/students/:id/grades", () => {
     expect(response.body.error).toBe("Unauthorized");
   });
 
+  //@ SUCCESS TEST
   it("should return 201 and grade added successfully", async () => {
     const testStudent = await createStudent();
     const testCourse = await createCourse();
