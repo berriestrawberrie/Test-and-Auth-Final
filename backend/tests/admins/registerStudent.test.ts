@@ -1,17 +1,11 @@
 import "../mocks/firebaseMock";
-import { testPrisma } from "../testClient";
 import request from "supertest";
 import { app } from "../../app";
+import { clearTestData, createStudent, mockAdminToken } from "../helpers";
 
 describe("POST /admins/register", () => {
-  const mockAdminToken = "mock-admin-token";
-
   beforeEach(async () => {
-    await testPrisma.grade.deleteMany();
-    await testPrisma.user.deleteMany({
-      where: { role: "STUDENT" },
-    });
-    await testPrisma.course.deleteMany();
+    await clearTestData();
   });
 
   it("should register a student with valid data", async () => {
@@ -60,7 +54,7 @@ describe("POST /admins/register", () => {
   it("should return 400 with missing required fields", async () => {
     const invalidData = {
       firstName: "Test",
-      // lastName missing
+      // ❌ lastName missing
       email: "test@test.com",
       personNumber: "19970101-1234",
       phone: "+46701234567",
@@ -107,20 +101,7 @@ describe("POST /admins/register", () => {
       address: "Test Street 123",
       password: "password123",
     };
-
-    // Create student first
-    await testPrisma.user.create({
-      data: {
-        id: "existing-student",
-        firstName: studentData.firstName,
-        lastName: studentData.lastName,
-        email: studentData.email,
-        personNumber: studentData.personNumber,
-        phone: studentData.phone,
-        address: studentData.address,
-        role: "STUDENT",
-      },
-    });
+    await createStudent(studentData);
 
     // Try to create again
     const response = await request(app)

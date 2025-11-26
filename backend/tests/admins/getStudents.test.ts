@@ -1,44 +1,16 @@
 import "../mocks/firebaseMock";
-import { testPrisma } from "../testClient";
 import request from "supertest";
 import { app } from "../../app";
-import { generateFirebaseUid } from "../helpers";
+import { clearTestData, createManyStudents, mockAdminToken } from "../helpers";
 import { User } from "@prisma/client";
 
 describe("GET /admins/students", () => {
-  const mockAdminToken = "mock-admin-token";
-
   beforeEach(async () => {
-    await testPrisma.grade.deleteMany();
-    await testPrisma.user.deleteMany({ where: { role: "STUDENT" } });
-    await testPrisma.course.deleteMany();
+    await clearTestData();
   });
 
   it("should return only students, not admins", async () => {
-    await testPrisma.user.createMany({
-      data: [
-        {
-          id: generateFirebaseUid(),
-          email: `${generateFirebaseUid()}@test.com`,
-          firstName: "John",
-          lastName: "Doe",
-          personNumber: "19950101-1234",
-          phone: "+46701111111",
-          address: "Student Street 1",
-          role: "STUDENT",
-        },
-        {
-          id: generateFirebaseUid(),
-          email: `${generateFirebaseUid()}@test.com`,
-          firstName: "Jane",
-          lastName: "Smith",
-          personNumber: "19960202-5678",
-          phone: "+46702222222",
-          address: "Student Street 2",
-          role: "STUDENT",
-        },
-      ],
-    });
+    await createManyStudents(2);
 
     const response = await request(app).get("/admins/students").set("Authorization", `Bearer ${mockAdminToken}`);
 

@@ -1,6 +1,10 @@
 import { testPrisma } from "./testClient";
 import type { User, Course } from "@prisma/client";
 
+export const TEST_ADMIN_ID = "adminAdminAdminAdminAdmin123";
+export const mockAdminToken = "mock-admin-token";
+export const noneExistentStudentId = "aBcDeFgHiJkLmNoPqRsTuVwXyZ12";
+
 export const generateFirebaseUid = (): string => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let uid = "";
@@ -19,7 +23,7 @@ export const createStudent = async (overrides: CreateStudentInput = {}) => {
   const student = await testPrisma.user.create({
     data: {
       id,
-      email: overrides.email ?? `${Date.now()}-${id}@test.com`,
+      email: overrides.email ?? `${id}@test.com`,
       firstName: overrides.firstName ?? "Test",
       lastName: overrides.lastName ?? "Student",
       personNumber: overrides.personNumber ?? "19970101-1234",
@@ -30,6 +34,15 @@ export const createStudent = async (overrides: CreateStudentInput = {}) => {
   });
   return student;
 };
+
+export const createManyStudents = async (count: number) => {
+  const created: User[] = [];
+  for (let i = 0; i < count; i++) {
+    created.push(await createStudent({ personNumber: `19970101-${(1000 + i).toString().slice(-4)}` }));
+  }
+  return created;
+};
+
 export const createTestAdmin = async (id = "adminAdminAdminAdminAdmin123") => {
   const admin = await testPrisma.user.upsert({
     where: { id },
@@ -47,11 +60,12 @@ export const createTestAdmin = async (id = "adminAdminAdminAdminAdmin123") => {
   });
   return admin;
 };
+
 type CreateCourseInput = Partial<Pick<Course, "id" | "title" | "desc">>;
 export const createCourse = async (overrides: CreateCourseInput = {}) => {
   const course = await testPrisma.course.create({
     data: {
-      id: overrides.id ?? undefined,
+      id: overrides.id ?? 1,
       title: overrides.title ?? `Course ${Date.now()}`,
       desc: overrides.desc ?? "Test course",
     },
