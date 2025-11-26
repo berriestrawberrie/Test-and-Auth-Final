@@ -2,6 +2,7 @@ import axios from "axios";
 import type { StudentInterface, UserCreationWithPasswordInterface } from "../../../interfaces/userInterfaces";
 import { userCreationSchema, userIdSchema, userUpdateSchema, type UserUpdateInput } from "../../../schemas/usersSchema";
 import { getCurrentUserToken } from "../../auth/token";
+import { gradeCreationSchema, type GradeCreationInput } from "../../../schemas/gradesSchema";
 
 const BACKEND_PORT = "3000";
 const BASE_URL = `http://localhost:${BACKEND_PORT}/admins`;
@@ -76,6 +77,26 @@ export const editStudent = async (id: string, userUpdateData: UserUpdateInput) =
       },
     });
 
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addGradeToStudent = async (studentId: string, gradeData: GradeCreationInput) => {
+  try {
+    const validatedStudentId = userIdSchema.safeParse(studentId);
+    if (!validatedStudentId.success) throw validatedStudentId.error;
+    const validatedGradeData = gradeCreationSchema.safeParse(gradeData);
+    if (!validatedGradeData.success) throw validatedGradeData.error;
+
+    const token = await getCurrentUserToken();
+    const response = await axios.post(`${BASE_URL}/students/${studentId}/grades`, validatedGradeData.data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
     console.error(error);

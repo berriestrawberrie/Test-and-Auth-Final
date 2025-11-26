@@ -19,7 +19,7 @@ const AdminGradesPage = () => {
     };
     handleStudentFetch();
   }, []);
-  console.log(students);
+
   return (
     <div>
       <h4>AdminGradesPage</h4>
