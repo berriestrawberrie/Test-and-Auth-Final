@@ -5,6 +5,7 @@ import {
   editStudent,
   getStudents,
   registerStudent,
+  updateGradeToStudent,
 } from "../controllers/admins/adminsController";
 
 export const adminsRoute = Router();
@@ -15,3 +16,4 @@ adminsRoute.get("/students", getStudents);
 adminsRoute.put("/students/:id", editStudent);
 adminsRoute.delete("/students/:id", deleteStudent);
 adminsRoute.post("/students/:id/grades", addGradeToStudent);
+adminsRoute.put("/students/:id/grades", updateGradeToStudent);

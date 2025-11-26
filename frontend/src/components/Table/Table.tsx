@@ -6,6 +6,8 @@ interface Props {
   title1: string;
   title2: string;
   title3: string;
+  title4?: string;
+  isExpand?: boolean;
   studentData?: Student;
   multiData?: StudentInterface[];
   selectedYear: number | null;
@@ -16,6 +18,8 @@ const Table: React.FC<Props> = ({
   title1,
   title2,
   title3,
+  title4,
+  isExpand,
   studentData,
   selectedYear,
   selectedCourse,
@@ -62,6 +66,7 @@ const Table: React.FC<Props> = ({
           <thead>
             <tr>
               <th className="th-title1">{title1}</th>
+              {isExpand && <th className="th-title4">{title4}</th>}
               <th className="th-title2">{title2}</th>
               <th className="th-title3">{title3}</th>
             </tr>
@@ -85,6 +90,7 @@ const Table: React.FC<Props> = ({
                 student.grades.map((grade) => (
                   <tr key={grade.id}>
                     <td>{student.firstName + " " + student.lastName}</td>
+                    {isExpand && <td>{grade.course.title}</td>}
                     <td>{grade.grade}</td>
                     <td>{new Date(grade.createdAt).toLocaleDateString()}</td>
                   </tr>

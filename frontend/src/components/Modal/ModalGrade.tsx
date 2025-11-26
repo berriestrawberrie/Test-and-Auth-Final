@@ -45,6 +45,7 @@ const ModalGrade: React.FC<Props> = ({
 
     return match?.grade;
   }
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -53,8 +54,7 @@ const ModalGrade: React.FC<Props> = ({
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     //CHECK IF GRADE IS DIFFERENT
     const checkGrade = getGradeForStudent(
       studentId,
@@ -66,7 +66,6 @@ const ModalGrade: React.FC<Props> = ({
       return;
     }
     try {
-      console.log(studentId, formData);
       await handleSaveGrade(studentId, formData);
     } catch (error: unknown) {
       console.error("Failed to save grade:", error);
@@ -101,10 +100,11 @@ const ModalGrade: React.FC<Props> = ({
               <label>Student</label>
               <select
                 name="student"
+                defaultValue=""
                 onChange={(e) => setStudentId(e.target.value)}
                 required
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Select Student
                 </option>
 
@@ -123,9 +123,10 @@ const ModalGrade: React.FC<Props> = ({
                   setYear(Number(e.target.value));
                   handleChange(e);
                 }}
+                value={year}
                 required
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Select Year
                 </option>
                 {yearOptions.map((year) => (
@@ -147,7 +148,7 @@ const ModalGrade: React.FC<Props> = ({
                 }}
                 required
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Select Course
                 </option>
                 <option value="1">Math</option>
@@ -157,8 +158,13 @@ const ModalGrade: React.FC<Props> = ({
             </div>
             <div>
               <label>Update Grade</label>
-              <select name="grade" onChange={handleChange} required>
-                <option value="" disabled selected>
+              <select
+                name="grade"
+                onChange={handleChange}
+                defaultValue=""
+                required
+              >
+                <option value="" disabled>
                   Select Grade
                 </option>
                 {gradeOptions.map((grade) => (

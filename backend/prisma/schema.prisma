@@ -53,6 +53,8 @@ model Grade {
 
   @@index([studentId])
   @@index([courseId])
+  
+  @@unique([studentId, courseId, year])
 }
 
 model Course {

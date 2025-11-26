@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   getStudents,
-  addGradeToStudent,
+  updateGradeToStudent,
 } from "../../api/handlers/admins/adminHandler";
 import type { StudentInterface } from "../../interfaces/userInterfaces";
 import Table from "../../components/Table/Table";
@@ -31,8 +31,7 @@ const AdminGradesPage = () => {
   }, []);
 
   const handleSaveGrade = async (id: string, gradeData: GradeCreationInput) => {
-    const updatedGrade = await addGradeToStudent(id, gradeData);
-    console.log(updatedGrade);
+    await updateGradeToStudent(id, gradeData);
   };
 
   return (
@@ -58,6 +57,8 @@ const AdminGradesPage = () => {
         title1={"Student"}
         title2={"Grade"}
         title3={"Date"}
+        title4={"Course"}
+        isExpand={true}
         multiData={students}
         selectedYear={selectedYear}
         selectedCourse={selectedCourse}
