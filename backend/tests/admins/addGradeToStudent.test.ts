@@ -53,6 +53,18 @@ describe("POST /admins/students/:id/grades", () => {
     expect(response.body.error).toBe("Course not found");
   });
 
+  it("should return 401 with no admin authorization", async () => {
+    const testStudent = await createStudent();
+    const testCourse = await createCourse();
+
+    const response = await request(app)
+      .post(`/admins/students/${testStudent.id}/grades`)
+      .send({ courseId: testCourse.id, grade: "A", year: 2 });
+
+    expect(response.status).toBe(401);
+    expect(response.body.error).toBe("Unauthorized");
+  });
+
   it("should return 201 and grade added successfully", async () => {
     const testStudent = await createStudent();
     const testCourse = await createCourse();

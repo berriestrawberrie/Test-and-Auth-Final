@@ -9,14 +9,14 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
   const token = authHeader?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ message: "No token provided." });
+    return res.status(401).json({ error: "Unauthorized" });
   }
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
     req.user = decodedToken;
     next();
   } catch (error) {
-    res.status(401).json({ message: "Unauthorized" });
+    res.status(401).json({ error: "Unauthorized" });
 
     console.error("Error occured at verifyToken:", error);
   }
@@ -24,7 +24,7 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
 
 export const verifyAdmin = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   try {
@@ -34,16 +34,16 @@ export const verifyAdmin = async (req: Request, res: Response, next: NextFunctio
     });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ error: "User not found" });
     }
 
     if (user.role === UserRole.ADMIN) {
       next();
     } else {
-      return res.status(403).json({ message: "Forbidden: Admin access required" });
+      return res.status(403).json({ error: "Forbidden: Admin access required" });
     }
   } catch (error) {
     console.error("Error occurred at verifyAdmin:", error);
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(403).json({ error: "Forbidden" });
   }
 };
