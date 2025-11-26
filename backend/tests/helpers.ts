@@ -3,7 +3,7 @@ import type { User, Course } from "@prisma/client";
 
 export const TEST_ADMIN_ID = "adminAdminAdminAdminAdmin123";
 export const mockAdminToken = "mock-admin-token";
-export const mockStudentToken = "student-mock-token";
+export const mockStudentToken = "mock-student-token";
 export const noneExistentStudentId = "aBcDeFgHiJkLmNoPqRsTuVwXyZ12";
 
 export const generateFirebaseUid = (): string => {

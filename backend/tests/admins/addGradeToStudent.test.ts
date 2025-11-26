@@ -1,7 +1,7 @@
 import "../mocks/firebaseMock";
 import request from "supertest";
 import { app } from "../../app";
-import { clearTestData, createCourse, createStudent, generateFirebaseUid, mockAdminToken } from "../helpers";
+import { clearTestData, createCourse, createStudent, mockAdminToken, noneExistentStudentId } from "../helpers";
 
 describe("POST /admins/students/:id/grades", () => {
   beforeEach(async () => {
@@ -21,7 +21,7 @@ describe("POST /admins/students/:id/grades", () => {
 
   it("should return 400 with invalid grade data", async () => {
     const response = await request(app)
-      .post(`/admins/students/${generateFirebaseUid()}/grades`)
+      .post(`/admins/students/${noneExistentStudentId}/grades`)
       .set("Authorization", `Bearer ${mockAdminToken}`)
       .send({ studentId: "invalid-id", courseId: "also-invalid", gradeValue: 5 });
 
@@ -32,7 +32,7 @@ describe("POST /admins/students/:id/grades", () => {
   //@ 404 NOT FOUND TESTS
   it("should return 404 and no student found", async () => {
     const response = await request(app)
-      .post(`/admins/students/${generateFirebaseUid()}/grades`)
+      .post(`/admins/students/${noneExistentStudentId}/grades`)
       .set("Authorization", `Bearer ${mockAdminToken}`)
       .send({ courseId: 1, grade: "A", year: 2 });
 
