@@ -1,5 +1,5 @@
 import { testPrisma } from "./testClient";
-import type { User, Course, Grade } from "@prisma/client";
+import type { User, Course } from "@prisma/client";
 
 export const generateFirebaseUid = (): string => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -25,7 +25,7 @@ export const createStudent = async (overrides: CreateStudentInput = {}) => {
       personNumber: overrides.personNumber ?? "19970101-1234",
       phone: overrides.phone ?? "+46701234567",
       address: overrides.address ?? "Test Street 1",
-      role: (overrides.role as any) ?? "STUDENT",
+      role: overrides.role ?? "STUDENT",
     },
   });
   return student;
@@ -62,8 +62,8 @@ export const createCourse = async (overrides: CreateCourseInput = {}) => {
 type CreateGradeInput = {
   studentId: string;
   courseId: number;
-  grade: string;
-  year: number;
+  grade: "A" | "B" | "C" | "D" | "F";
+  year: 1 | 2 | 3;
 };
 
 export const createGrade = async (data: CreateGradeInput) => {
@@ -71,7 +71,7 @@ export const createGrade = async (data: CreateGradeInput) => {
     data: {
       studentId: data.studentId,
       courseId: data.courseId,
-      grade: data.grade as any,
+      grade: data.grade,
       year: data.year,
     },
   });
