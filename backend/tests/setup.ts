@@ -1,3 +1,4 @@
+import { clearTestData, createTestAdmin } from "./helpers";
 import { testPrisma } from "./testClient";
 
 if (process.env.NODE_ENV !== "test") {
@@ -5,36 +6,15 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 console.log("✅ Test environment loaded");
-
-const TEST_ADMIN_ID = "adminAdminAdminAdminAdmin123";
-
-// Create admin once
+// Runs before testing starts.
 beforeAll(async () => {
-  await testPrisma.grade.deleteMany();
-  await testPrisma.user.deleteMany();
-  await testPrisma.course.deleteMany();
-
-  await testPrisma.user.create({
-    data: {
-      id: TEST_ADMIN_ID,
-      email: "admin@test.com",
-      firstName: "Test",
-      lastName: "Admin",
-      personNumber: "19900101-1234",
-      phone: "+46701234567",
-      address: "Test Street 1",
-      role: "ADMIN",
-    },
-  });
-
-  console.log("Global test admin created");
+  await clearTestData();
+  await createTestAdmin();
 });
 
-// Cleanup so each test starts fresh
+// Cleanup after all tests have finished.
 afterAll(async () => {
-  await testPrisma.grade.deleteMany();
-  await testPrisma.user.deleteMany();
-  await testPrisma.course.deleteMany();
+  await clearTestData();
   await testPrisma.$disconnect();
-  console.log("Global test cleanup complete");
+  console.log("✅ Global test cleanup complete");
 });

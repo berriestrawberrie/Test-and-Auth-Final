@@ -9,7 +9,7 @@ export const getStudent = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (req.user?.uid !== id) {
-      return res.status(403).json({ message: "Forbidden: You can only access your own data" });
+      return res.status(403).json({ error: "Forbidden: You can only access your own data" });
     }
 
     const student = await prisma.user.findUnique({
@@ -43,7 +43,7 @@ export const getStudent = async (req: Request, res: Response) => {
     });
     //CHECK STUDENT EXISTS
     if (!student) {
-      return res.status(404).json({ message: "Error Fetching student data: Student not found" });
+      return res.status(404).json({ error: "Error Fetching student data: Student not found" });
     }
 
     return res.status(200).json(student);
