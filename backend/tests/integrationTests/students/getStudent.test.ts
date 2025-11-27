@@ -1,7 +1,7 @@
-import "../mocks/firebaseMock";
+import "../../mocks/firebaseMock";
 import request from "supertest";
-import { app } from "../../app";
-import { clearTestData, createManyStudents, mockAdminToken, noneExistentStudentId } from "../helpers";
+import { app } from "../../../app";
+import { clearTestData, createManyStudents, mockAdminToken, noneExistentStudentId } from "../../helpers";
 
 describe("GET /students/:id", () => {
   beforeEach(async () => {

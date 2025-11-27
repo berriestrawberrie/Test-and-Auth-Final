@@ -1,7 +1,7 @@
-import "../mocks/firebaseMock";
+import "../../mocks/firebaseMock";
 import request from "supertest";
-import { app } from "../../app";
-import { clearTestData, createManyStudents, createStudent, mockAdminToken } from "../helpers";
+import { app } from "../../../app";
+import { clearTestData, createManyStudents, createStudent, mockAdminToken } from "../../helpers";
 import { User } from "@prisma/client";
 
 describe("GET /admins/students", () => {

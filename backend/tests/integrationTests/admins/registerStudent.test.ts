@@ -1,7 +1,7 @@
-import "../mocks/firebaseMock";
+import "../../mocks/firebaseMock";
 import request from "supertest";
-import { app } from "../../app";
-import { clearTestData, createStudent, mockAdminToken } from "../helpers";
+import { app } from "../../../app";
+import { clearTestData, createStudent, mockAdminToken } from "../../helpers";
 
 const studentData = {
   firstName: "New",

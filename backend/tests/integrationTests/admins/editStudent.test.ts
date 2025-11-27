@@ -1,6 +1,6 @@
-import "../mocks/firebaseMock";
+import "../../mocks/firebaseMock";
 import request from "supertest";
-import { app } from "../../app";
+import { app } from "../../../app";
 import {
   clearTestData,
   createManyStudents,
@@ -8,7 +8,7 @@ import {
   mockAdminToken,
   noneExistentStudentId,
   TEST_ADMIN_ID,
-} from "../helpers";
+} from "../../helpers";
 
 describe("PUT /admins/students/:id", () => {
   beforeEach(async () => {

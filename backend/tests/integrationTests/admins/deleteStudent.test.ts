@@ -1,8 +1,8 @@
-import "../mocks/firebaseMock";
-import { testPrisma } from "../testClient";
+import "../../mocks/firebaseMock";
+import { testPrisma } from "../../testClient";
 import request from "supertest";
-import { app } from "../../app";
-import { clearTestData, createStudent, mockAdminToken, noneExistentStudentId, TEST_ADMIN_ID } from "../helpers";
+import { app } from "../../../app";
+import { clearTestData, createStudent, mockAdminToken, noneExistentStudentId, TEST_ADMIN_ID } from "../../helpers";
 
 describe("DELETE /admins/students/:id", () => {
   beforeEach(async () => {
