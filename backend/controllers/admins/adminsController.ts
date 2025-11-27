@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { userCreationSchema, userIdSchema, UserUpdateInput, userUpdateSchema } from "../../schemas/usersSchema";
+import {
+  userCreationSchema,
+  userIdSchema,
+  UserUpdateInput,
+  userUpdateSchema,
+} from "../../schemas/usersSchema";
 import { prisma } from "../../prisma/client";
 import admin from "firebase-admin";
 import { gradeCreationSchema } from "../../schemas/gradesSchema";
@@ -42,7 +47,9 @@ export const getStudents = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "No students found", users: [] });
     }
 
-    return res.status(200).json({ message: "Fetched all students succesfully", users });
+    return res
+      .status(200)
+      .json({ message: "Fetched all students succesfully", users });
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).json({ error: "Failed to fetch students" });
@@ -64,7 +71,15 @@ export const registerStudent = async (req: Request, res: Response) => {
       });
     }
 
-    const { firstName, lastName, personNumber, phone, address, email, password } = validatedUser.data;
+    const {
+      firstName,
+      lastName,
+      personNumber,
+      phone,
+      address,
+      email,
+      password,
+    } = validatedUser.data;
 
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -131,14 +146,18 @@ export const deleteStudent = async (req: Request, res: Response) => {
     ];
 
     if (protectedStudentIds.includes(validatedId.data)) {
-      return res.status(403).json({ error: "Cannot delete a protected student" });
+      return res
+        .status(403)
+        .json({ error: "Cannot delete a protected student" });
     }
     const existingUser = await prisma.user.findUnique({
       where: { id: validatedId.data },
     });
 
     if (!existingUser || existingUser.role !== "STUDENT") {
-      return res.status(404).json({ error: "No student found with the provided ID" });
+      return res
+        .status(404)
+        .json({ error: "No student found with the provided ID" });
     }
 
     await prisma.user.delete({
@@ -151,7 +170,9 @@ export const deleteStudent = async (req: Request, res: Response) => {
       console.error("Failed to delete Firebase user:", firebaseError);
     }
 
-    return res.status(200).json({ message: "Deleted student successfully", user: existingUser });
+    return res
+      .status(200)
+      .json({ message: "Deleted student successfully", user: existingUser });
   } catch (error) {
     console.error("Error deleting student:", error);
     res.status(500).json({ error: "Failed to delete student" });
@@ -186,26 +207,35 @@ export const editStudent = async (req: Request, res: Response) => {
     });
 
     if (!existingUser || existingUser.role !== "STUDENT") {
-      return res.status(404).json({ error: "No student found with the provided ID" });
+      return res
+        .status(404)
+        .json({ error: "No student found with the provided ID" });
     }
 
-    const { firstName, lastName, personNumber, address, email, phone } = validatedUserUpdate.data;
+    const { firstName, lastName, personNumber, address, email, phone } =
+      validatedUserUpdate.data;
 
     const dataToUpdate: UserUpdateInput = {};
 
-    if (firstName && firstName !== existingUser.firstName) dataToUpdate.firstName = firstName.trim();
-    if (lastName && lastName !== existingUser.lastName) dataToUpdate.lastName = lastName.trim();
+    if (firstName && firstName !== existingUser.firstName)
+      dataToUpdate.firstName = firstName.trim();
+    if (lastName && lastName !== existingUser.lastName)
+      dataToUpdate.lastName = lastName.trim();
     if (personNumber && personNumber !== existingUser.personNumber) {
       const personNumberExists = await prisma.user.findUnique({
         where: { personNumber },
       });
       if (personNumberExists) {
-        return res.status(409).json({ error: "Person number is already in use by another user" });
+        return res
+          .status(409)
+          .json({ error: "Person number is already in use by another user" });
       }
       dataToUpdate.personNumber = personNumber.trim();
     }
-    if (address && address !== existingUser.address) dataToUpdate.address = address.trim();
-    if (phone && phone !== existingUser.phone) dataToUpdate.phone = phone.trim();
+    if (address && address !== existingUser.address)
+      dataToUpdate.address = address.trim();
+    if (phone && phone !== existingUser.phone)
+      dataToUpdate.phone = phone.trim();
     if (email && email !== existingUser.email) {
       const protectedStudentIds = [
         "BMDeWpyRqHTvHulBD85QRGsbTed2",
@@ -215,13 +245,17 @@ export const editStudent = async (req: Request, res: Response) => {
         "RxH5xFzCGBVMRVfMRujKK43gRBr2",
       ];
       if (protectedStudentIds.includes(validatedId.data)) {
-        return res.status(403).json({ error: "Cannot change email of a protected student" });
+        return res
+          .status(403)
+          .json({ error: "Cannot change email of a protected student" });
       }
       const emailExists = await prisma.user.findUnique({
         where: { email },
       });
       if (emailExists) {
-        return res.status(409).json({ error: "Email is already in use by another user" });
+        return res
+          .status(409)
+          .json({ error: "Email is already in use by another user" });
       }
       dataToUpdate.email = email.trim().toLowerCase();
     }
@@ -252,20 +286,24 @@ export const editStudent = async (req: Request, res: Response) => {
           });
 
           return res.status(500).json({
-            error: "Failed to update email in Firebase. Changes have been rolled back.",
+            error:
+              "Failed to update email in Firebase. Changes have been rolled back.",
             details: "Email remains unchanged",
           });
         } catch (rollbackError) {
           console.error("Failed to rollback email change:", rollbackError);
 
           return res.status(500).json({
-            error: "Critical error: Email update partially failed. Manual intervention required.",
+            error:
+              "Critical error: Email update partially failed. Manual intervention required.",
             details: "Database updated but Firebase sync failed",
           });
         }
       }
     }
-    return res.status(200).json({ message: "Updated student successfully", user: updatedUser });
+    return res
+      .status(200)
+      .json({ message: "Updated student successfully", user: updatedUser });
   } catch (error) {
     console.error("Error updating student:", error);
     res.status(500).json({ error: "Failed to update student" });
@@ -299,7 +337,9 @@ export const addGradeToStudent = async (req: Request, res: Response) => {
       where: { id: validatedId.data },
     });
     if (!existingUser || existingUser.role !== "STUDENT") {
-      return res.status(404).json({ error: "No student found with the provided ID" });
+      return res
+        .status(404)
+        .json({ error: "No student found with the provided ID" });
     }
 
     const { courseId, grade, year } = validatedGrade.data;
@@ -319,7 +359,78 @@ export const addGradeToStudent = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(201).json({ message: "Grade added successfully", grade: createdGrade });
+    res
+      .status(201)
+      .json({ message: "Grade added successfully", grade: createdGrade });
+  } catch (error) {
+    console.error("Error creating grade:", error);
+    res.status(500).json({ error: "Failed to create grade." });
+  }
+};
+
+// @desc: update a grade to a student by ID.
+// @method: PUT
+// @params: id
+// @body: { courseId: number, grade: "A"|"B"|"C"|"D"|"F", year: 1|2|3 }
+// @route /admins/students/:id/grades
+export const updateGradeToStudent = async (req: Request, res: Response) => {
+  try {
+    const validatedId = userIdSchema.safeParse(req.params.id);
+    if (!validatedId.success) {
+      return res.status(400).json({
+        error: "Invalid userID format",
+        details: validatedId.error,
+      });
+    }
+
+    const validatedGrade = gradeCreationSchema.safeParse(req.body);
+    if (!validatedGrade.success) {
+      return res.status(400).json({
+        error: "Invalid grade data",
+        details: validatedGrade.error,
+      });
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: validatedId.data },
+    });
+    if (!existingUser || existingUser.role !== "STUDENT") {
+      return res
+        .status(404)
+        .json({ error: "No student found with the provided ID" });
+    }
+
+    const { courseId, grade, year } = validatedGrade.data;
+    const studentId = validatedId.data;
+    const course = await prisma.course.findUnique({
+      where: { id: courseId },
+    });
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    const updateGrade = await prisma.grade.upsert({
+      where: {
+        studentId_courseId_year: {
+          studentId,
+          courseId,
+          year,
+        },
+      },
+      update: {
+        grade,
+      },
+      create: {
+        studentId,
+        courseId,
+        year,
+        grade,
+      },
+    });
+
+    res
+      .status(201)
+      .json({ message: "Grade updated successfully", grade: updateGrade });
   } catch (error) {
     console.error("Error creating grade:", error);
     res.status(500).json({ error: "Failed to create grade." });

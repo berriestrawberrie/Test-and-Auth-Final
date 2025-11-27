@@ -17,6 +17,8 @@
   max-width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background-color: var(--accent2);
+  display: flex;
+  gap: 10px;
 }
 
 .modal-close {
@@ -67,4 +69,20 @@
 }
 .modal-form label {
   display: block;
+}
+.modal-form select {
+  width: 120px;
+  text-align: center;
+}
+
+.modal-gradeinfo p {
+  background-color: var(--white);
+  border-radius: 8px;
+  height: 40%;
+  width: 40%;
+  margin: 10px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
 }

@@ -34,3 +34,6 @@ tbody tr:hover {
 .th-title1 {
   width: 60%;
 }
+.table-key {
+  text-align: right;
+}
