@@ -16,4 +16,4 @@ adminsRoute.get("/students", getStudents);
 adminsRoute.put("/students/:id", editStudent);
 adminsRoute.delete("/students/:id", deleteStudent);
 adminsRoute.post("/students/:id/grades", addGradeToStudent);
-adminsRoute.put("/students/:id/grades", updateGradeToStudent);
+adminsRoute.post("/students/:id/gradesupsert", updateGradeToStudent);

@@ -409,7 +409,7 @@ export const updateGradeToStudent = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Course not found" });
     }
 
-    const updateGrade = await prisma.grade.update({
+    const updateGrade = await prisma.grade.upsert({
       where: {
         studentId_courseId_year: {
           studentId,
@@ -417,8 +417,14 @@ export const updateGradeToStudent = async (req: Request, res: Response) => {
           year,
         },
       },
-      data: {
-        grade: grade,
+      update: {
+        grade,
+      },
+      create: {
+        studentId,
+        courseId,
+        year,
+        grade,
       },
     });
 

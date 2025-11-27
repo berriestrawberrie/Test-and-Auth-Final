@@ -147,8 +147,8 @@ export const updateGradeToStudent = async (
     if (!validatedGradeData.success) throw validatedGradeData.error;
 
     const token = await getCurrentUserToken();
-    const response = await axios.put(
-      `${BASE_URL}/students/${studentId}/grades`,
+    const response = await axios.post(
+      `${BASE_URL}/students/${studentId}/gradesupsert`,
       validatedGradeData.data,
       {
         headers: {
