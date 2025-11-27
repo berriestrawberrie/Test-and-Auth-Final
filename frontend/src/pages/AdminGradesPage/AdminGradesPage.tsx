@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
-import { getStudents } from "../../api/handlers/admins/adminHandler";
+import {
+  getStudents,
+  updateGradeToStudent,
+} from "../../api/handlers/admins/adminHandler";
 import type { StudentInterface } from "../../interfaces/userInterfaces";
 import Table from "../../components/Table/Table";
 import Filter from "../../components/Filter/Filter";
+import Button from "../../components/Button/Button";
+import ModalGrade from "../../components/Modal/ModalGrade";
+import { gradeCreationSchema } from "../../schemas/gradesSchema";
+import type { z } from "zod";
+
+type GradeCreationInput = z.infer<typeof gradeCreationSchema>;
 
 const AdminGradesPage = () => {
   //FILTER YEAR
@@ -10,6 +19,7 @@ const AdminGradesPage = () => {
   //FILTER COURSES
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [students, setStudents] = useState<StudentInterface[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   useEffect(() => {
     const handleStudentFetch = async () => {
       const fetchedStudents = await getStudents();
@@ -20,6 +30,10 @@ const AdminGradesPage = () => {
     handleStudentFetch();
   }, []);
 
+  const handleSaveGrade = async (id: string, gradeData: GradeCreationInput) => {
+    await updateGradeToStudent(id, gradeData);
+  };
+
   return (
     <div>
       <h4>AdminGradesPage</h4>
@@ -29,10 +43,22 @@ const AdminGradesPage = () => {
         setSelectedYear={setSelectedYear}
         setSelectedCourse={setSelectedCourse}
       />
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button text="Add Grade" onClick={() => setIsModalOpen(true)} />
+      </div>
+      {isModalOpen && (
+        <ModalGrade
+          students={students}
+          handleClose={() => setIsModalOpen(false)}
+          handleSaveGrade={handleSaveGrade}
+        />
+      )}
       <Table
         title1={"Student"}
         title2={"Grade"}
         title3={"Date"}
+        title4={"Course"}
+        isExpand={true}
         multiData={students}
         selectedYear={selectedYear}
         selectedCourse={selectedCourse}
