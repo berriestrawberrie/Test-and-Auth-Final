@@ -1,6 +1,11 @@
-const verifyIdToken = jest.fn().mockResolvedValue({
-  uid: "adminAdminAdminAdminAdmin123",
-  email: "admin@test.com",
+const verifyIdToken = jest.fn().mockImplementation(async (token: string) => {
+  if (!token) throw new Error("No token provided");
+  if (token === "mock-admin-token") return { uid: "adminAdminAdminAdminAdmin123", email: "admin@test.com" };
+  if (token.startsWith("student-")) {
+    const uid = token.replace(/^student-/, "");
+    return { uid, email: `${uid}@test.local` };
+  }
+  throw new Error("Invalid token");
 });
 const createUser = jest.fn().mockResolvedValue({ uid: "new-student-uid" });
 const deleteUser = jest.fn().mockResolvedValue(undefined);

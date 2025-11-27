@@ -1,7 +1,7 @@
 import "../mocks/firebaseMock";
 import request from "supertest";
 import { app } from "../../app";
-import { clearTestData, createManyStudents, mockAdminToken } from "../helpers";
+import { clearTestData, createManyStudents, createStudent, mockAdminToken } from "../helpers";
 import { User } from "@prisma/client";
 
 describe("GET /admins/students", () => {
@@ -35,5 +35,12 @@ describe("GET /admins/students", () => {
   it("should return 401 without token", async () => {
     const response = await request(app).get("/admins/students");
     expect(response.status).toBe(401);
+  });
+
+  it("should return 403 with student token", async () => {
+    const student = await createStudent();
+    const response = await request(app).get("/admins/students").set("Authorization", `Bearer student-${student.id}`);
+    expect(response.status).toBe(403);
+    expect(response.body.error).toBe("Forbidden: Admin access required");
   });
 });

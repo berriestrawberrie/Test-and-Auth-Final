@@ -243,4 +243,16 @@ describe("PUT /admins/students/:id", () => {
 
     expect(response.status).toBe(401);
   });
+
+  it("should return 403 with student token", async () => {
+    const student = await createStudent();
+
+    const response = await request(app)
+      .put(`/admins/students/${student.id}`)
+      .set("Authorization", `Bearer student-${student.id}`)
+      .send({ firstName: "Beanbag" });
+
+    expect(response.status).toBe(403);
+    expect(response.body.error).toBe("Forbidden: Admin access required");
+  });
 });

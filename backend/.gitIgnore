@@ -4,3 +4,5 @@ firebaseServiceAccountKey.json
 .env*
 .env.test
 !example.env
+/coverage/
+/.nyc_output/

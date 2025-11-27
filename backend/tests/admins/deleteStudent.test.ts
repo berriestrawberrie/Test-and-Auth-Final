@@ -62,4 +62,15 @@ describe("DELETE /admins/students/:id", () => {
 
     expect(response.status).toBe(401);
   });
+
+  it("should return 403 with student token", async () => {
+    const student = await createStudent();
+
+    const response = await request(app)
+      .delete(`/admins/students/${student.id}`)
+      .set("Authorization", `Bearer student-${student.id}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body.error).toBe("Forbidden: Admin access required");
+  });
 });
