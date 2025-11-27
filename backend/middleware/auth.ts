@@ -11,6 +11,13 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
   }
+  // DEV shortcut: accept "dev-<uid>" tokens so Swagger / local testing is trivial
+  if (process.env.NODE_ENV === "development" && token.startsWith("dev-")) {
+    const uid = token.replace(/^dev-/, "");
+    req.user = { uid, email: `${uid}@local.test` };
+    return next();
+  }
+
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
     req.user = decodedToken;

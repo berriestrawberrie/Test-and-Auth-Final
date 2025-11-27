@@ -1,0 +1,141 @@
+openapi: 3.1.0
+info:
+  title: testAndAuthFinal
+  version: 1.0.0
+  contact:
+    name: Bean
+    email: beans@example.com
+  description: "Documentation for the testAndAuthFinal exam."
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Admins
+    description: "Admin-only endpoints for managing students and grades."
+  - name: Grades
+    description: "Operations for creating, updating and listing grades."
+  - name: Students
+    description: "Student related endpoints currently read only."
+  - name: Users
+    description: "Used for logging in a user."
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "Firebase ID token. Click Authorize and paste: Bearer dev-<ID_TOKEN>"
+  schemas:
+    UserRole:
+      type: string
+      enum:
+        - STUDENT
+        - ADMIN
+
+    GradeValue:
+      type: string
+      enum:
+        - A
+        - B
+        - C
+        - D
+        - F
+
+    User:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - personNumber
+        - phone
+        - address
+        - personNumber
+        - email
+        - role
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        personNumber:
+          type: string
+          description: "Personal identity number (must be unique in the DB)"
+          x-unique: true
+        phone:
+          type: string
+        address:
+          type: string
+        email:
+          type: string
+          description: "User email (must be unique in the DB)"
+          x-unique: true
+        role:
+          $ref: "#/components/schemas/UserRole"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        grades:
+          type: array
+          items:
+            $ref: "#/components/schemas/Grade"
+    ErrorConflict:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Conflict: personNumber already exists"
+    Grade:
+      type: object
+      required:
+        - id
+        - studentId
+        - courseId
+        - grade
+        - year
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: string
+        courseId:
+          type: integer
+        grade:
+          $ref: "#/components/schemas/GradeValue"
+        year:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    # Course:
+    #   type: object
+    #   properties:
+    #     id:
+    #       type: integer
+    #     title:
+    #       type: string
+    #     desc:
+    #       type: string
+    #     grades:
+    #       type: array
+    #       items:
+    #         $ref: "#/components/schemas/Grade"
+    #     createdAt:
+    #       type: string
+    #       format: date-time
+    #     updatedAt:
+    #       type: string
+    #       format: date-time
+
+paths:
+  /students/{id}:
+    $ref: "./paths/student/get-student-by-id.yaml"
+  /admins/students/{id}/grades:
+    $ref: "./paths/admin/add-grade-to-student.yaml"
