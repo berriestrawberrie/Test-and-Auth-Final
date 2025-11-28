@@ -52,7 +52,7 @@ export const getStudents = async (req: Request, res: Response) => {
 // @desc: Creates a student in the db.
 // @method: POST
 // @body: UserCreationWithPasswordInterface
-// @route /admins/register
+// @route /admins/students
 export const registerStudent = async (req: Request, res: Response) => {
   let firebaseUser: admin.auth.UserRecord | null = null;
   try {

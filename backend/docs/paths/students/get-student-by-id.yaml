@@ -1,0 +1,59 @@
+summary: Get student by id
+tags: [Students]
+security:
+  - bearerAuth: []
+parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      type: string
+responses:
+  "200":
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/User"
+  "400":
+    description: Validation failed
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+            details:
+              type: object
+          required: [details, error]
+  "401":
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "403":
+    description: "Forbidden: You can only access your own data"
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "404":
+    description: "Error Fetching student data: Student not found"
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]

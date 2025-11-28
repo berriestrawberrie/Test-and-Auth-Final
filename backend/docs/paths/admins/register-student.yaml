@@ -1,0 +1,90 @@
+summary: Register a student
+description: Register a student - requires Admin role (bearer token).
+tags: [Admins, Students]
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          firstName:
+            type: string
+          lastName:
+            type: string
+          personNumber:
+            type: string
+          phone:
+            type: string
+          address:
+            type: string
+          email:
+            type: string
+            format: email
+          password:
+            type: string
+        required: [firstName, lastName, personNumber, email, password]
+responses:
+  "201":
+    description: Created
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            user:
+              $ref: "../../openapi.yaml#/components/schemas/User"
+          required: [message, user]
+  "400":
+    description: Validation failed
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+            details:
+              type: object
+          required: [details, error]
+
+  "401":
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "409":
+    description: Student already exists
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/ErrorConflict"
+  "500":
+    description: Failed to create student
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]

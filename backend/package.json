@@ -12,7 +12,7 @@
     "openapi:bundle": "npx @redocly/openapi-cli bundle docs/openapi.yaml -o docs/bundled.yaml 2>/dev/null",
     "openapi:validate": "npx @redocly/openapi-cli validate docs/bundled.yaml",
     "openapi:gen": "npm run openapi:bundle && npm run openapi:validate",
-    "dev": "npm run openapi:gen && NODE_ENV=development nodemon --watch docs --ext yaml,yml --exec tsx index.ts",
+    "dev": "NODE_ENV=development nodemon --watch docs --ext yaml,yml --exec tsx index.ts",
     "lint": "eslint"
   },
   "prisma": {

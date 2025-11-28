@@ -1,0 +1,64 @@
+summary: Get all students
+description: Get all students — requires Admin role (bearer token).
+tags: [Admins, Students]
+security:
+  - bearerAuth: []
+responses:
+  "200":
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            users:
+              type: array
+              items:
+                $ref: "../../openapi.yaml#/components/schemas/User"
+          required: [message, users]
+  "401":
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "404":
+    description: No students found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+            users:
+              type: array
+              items:
+                $ref: "../../openapi.yaml#/components/schemas/User"
+          required: [error, users]
+  "500":
+    description: Failed to fetch students
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]

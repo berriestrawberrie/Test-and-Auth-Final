@@ -10,7 +10,7 @@ import {
 
 export const adminsRoute = Router();
 
-adminsRoute.post("/register", registerStudent);
+adminsRoute.post("/students", registerStudent);
 adminsRoute.get("/students", getStudents);
 
 adminsRoute.put("/students/:id", editStudent);

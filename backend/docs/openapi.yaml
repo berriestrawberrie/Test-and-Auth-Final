@@ -14,7 +14,7 @@ tags:
   - name: Grades
     description: "Operations for creating, updating and listing grades."
   - name: Students
-    description: "Student related endpoints currently read only."
+    description: "Student related endpoints."
   - name: Users
     description: "Used for logging in a user."
 components:
@@ -23,7 +23,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: "Firebase ID token. Click Authorize and paste: Bearer dev-<ID_TOKEN>"
+      description: "Firebase ID token. If NODE_ENV is set to development you can paste dev-ID_TOKEN and press authorize."
   schemas:
     UserRole:
       type: string
@@ -83,12 +83,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Grade"
-    ErrorConflict:
-      type: object
-      properties:
-        error:
-          type: string
-          example: "Conflict: personNumber already exists"
     Grade:
       type: object
       required:
@@ -133,9 +127,41 @@ components:
     #     updatedAt:
     #       type: string
     #       format: date-time
+    ErrorConflict:
+      type: object
+      properties:
+        error:
+          type: string
+  examples:
+    ErrorConflict_PersonNumber:
+      summary: Person number conflict
+      value:
+        error: "Conflict: personNumber already exists"
+    ErrorConflict_Email:
+      summary: Email conflict
+      value:
+        error: "Conflict: email already exists"
 
 paths:
+  /users/login:
+    post:
+      $ref: "./paths/user/login-user.yml"
   /students/{id}:
-    $ref: "./paths/student/get-student-by-id.yaml"
+    get:
+      $ref: "./paths/students/get-student-by-id.yaml"
+  /admins/students:
+    get:
+      $ref: "./paths/admins/get-students.yaml"
+    post:
+      $ref: "./paths/admins/register-student.yaml"
+  /admins/students/{id}:
+    delete:
+      $ref: "./paths/admins/delete-student.yaml"
+    put:
+      $ref: "./paths/admins/edit-student.yaml"
   /admins/students/{id}/grades:
-    $ref: "./paths/admin/add-grade-to-student.yaml"
+    post:
+      $ref: "./paths/admins/add-grade-to-student.yaml"
+  /admins/students/{id}/gradesupsert:
+    post:
+      $ref: "./paths/admins/upsert-grade-to-student.yaml"

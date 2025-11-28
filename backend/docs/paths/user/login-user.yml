@@ -1,0 +1,61 @@
+summary: Log in user.
+description: Returns id, email, firstName, lastName and role from our DB.
+tags: [Users]
+security:
+  - bearerAuth: []
+responses:
+  "200":
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            user:
+              type: object
+              properties:
+                id:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                role:
+                  $ref: "../../openapi.yaml#/components/schemas/UserRole"
+              required: [id, email, role]
+          required: [message, user]
+  "401":
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "404":
+    description: "Error Fetching student data: Student not found"
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "500":
+    description: Failed to log in user
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
