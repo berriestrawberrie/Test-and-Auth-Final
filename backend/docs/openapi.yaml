@@ -1,0 +1,167 @@
+openapi: 3.1.0
+info:
+  title: testAndAuthFinal
+  version: 1.0.0
+  contact:
+    name: Bean
+    email: beans@example.com
+  description: "Documentation for the testAndAuthFinal exam."
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Admins
+    description: "Admin-only endpoints for managing students and grades."
+  - name: Grades
+    description: "Operations for creating, updating and listing grades."
+  - name: Students
+    description: "Student related endpoints."
+  - name: Users
+    description: "Used for logging in a user."
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "Firebase ID token. If NODE_ENV is set to development you can paste dev-ID_TOKEN and press authorize."
+  schemas:
+    UserRole:
+      type: string
+      enum:
+        - STUDENT
+        - ADMIN
+
+    GradeValue:
+      type: string
+      enum:
+        - A
+        - B
+        - C
+        - D
+        - F
+
+    User:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - personNumber
+        - phone
+        - address
+        - personNumber
+        - email
+        - role
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        personNumber:
+          type: string
+          description: "Personal identity number (must be unique in the DB)"
+          x-unique: true
+        phone:
+          type: string
+        address:
+          type: string
+        email:
+          type: string
+          description: "User email (must be unique in the DB)"
+          x-unique: true
+        role:
+          $ref: "#/components/schemas/UserRole"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        grades:
+          type: array
+          items:
+            $ref: "#/components/schemas/Grade"
+    Grade:
+      type: object
+      required:
+        - id
+        - studentId
+        - courseId
+        - grade
+        - year
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: string
+        courseId:
+          type: integer
+        grade:
+          $ref: "#/components/schemas/GradeValue"
+        year:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    # Course:
+    #   type: object
+    #   properties:
+    #     id:
+    #       type: integer
+    #     title:
+    #       type: string
+    #     desc:
+    #       type: string
+    #     grades:
+    #       type: array
+    #       items:
+    #         $ref: "#/components/schemas/Grade"
+    #     createdAt:
+    #       type: string
+    #       format: date-time
+    #     updatedAt:
+    #       type: string
+    #       format: date-time
+    ErrorConflict:
+      type: object
+      properties:
+        error:
+          type: string
+  examples:
+    ErrorConflict_PersonNumber:
+      summary: Person number conflict
+      value:
+        error: "Conflict: personNumber already exists"
+    ErrorConflict_Email:
+      summary: Email conflict
+      value:
+        error: "Conflict: email already exists"
+
+paths:
+  /users/login:
+    post:
+      $ref: "./paths/user/login-user.yml"
+  /students/{id}:
+    get:
+      $ref: "./paths/students/get-student-by-id.yaml"
+  /admins/students:
+    get:
+      $ref: "./paths/admins/get-students.yaml"
+    post:
+      $ref: "./paths/admins/register-student.yaml"
+  /admins/students/{id}:
+    delete:
+      $ref: "./paths/admins/delete-student.yaml"
+    put:
+      $ref: "./paths/admins/edit-student.yaml"
+  /admins/students/{id}/grades:
+    post:
+      $ref: "./paths/admins/add-grade-to-student.yaml"
+  /admins/students/{id}/gradesupsert:
+    post:
+      $ref: "./paths/admins/upsert-grade-to-student.yaml"

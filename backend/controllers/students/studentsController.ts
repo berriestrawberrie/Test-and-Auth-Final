@@ -1,19 +1,27 @@
 import type { Request, Response } from "express";
 import { prisma } from "../../prisma/client";
+import { userIdSchema } from "../../schemas/usersSchema";
 
 // @desc: fetch the logged in user data
 // @method: GET
+// @param id: user id
 // @route /students/:id
 export const getStudent = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const validatedId = userIdSchema.safeParse(req.params.id);
+    if (!validatedId.success) {
+      return res.status(400).json({
+        error: "Invalid ID format",
+        details: validatedId.error,
+      });
+    }
 
-    if (req.user?.uid !== id) {
+    if (req.user?.uid !== validatedId.data) {
       return res.status(403).json({ error: "Forbidden: You can only access your own data" });
     }
 
     const student = await prisma.user.findUnique({
-      where: { id },
+      where: { id: validatedId.data },
       select: {
         id: true,
         firstName: true,

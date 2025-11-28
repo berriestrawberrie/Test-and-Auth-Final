@@ -6,3 +6,4 @@ firebaseServiceAccountKey.json
 !example.env
 /coverage/
 /.nyc_output/
+docs/bundled.yaml

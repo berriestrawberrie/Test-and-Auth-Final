@@ -1,0 +1,110 @@
+summary: Edit a student
+description: Edit a student - requires Admin role (bearer token).
+tags: [Admins, Students]
+security:
+  - bearerAuth: []
+parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      type: string
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        minProperties: 1
+        additionalProperties: false
+        properties:
+          firstName:
+            type: string
+          lastName:
+            type: string
+          personNumber:
+            type: string
+          phone:
+            type: string
+          address:
+            type: string
+          email:
+            type: string
+            format: email
+responses:
+  "200":
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            user:
+              $ref: "../../openapi.yaml#/components/schemas/User"
+          required: [message, user]
+  "400":
+    description: Validation failed
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+            details:
+              type: object
+          required: [details, error]
+
+  "401":
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "404":
+    description: No student found with the provided ID
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "409":
+    description: Unique email or personNumber constraint
+    content:
+      application/json:
+        schema:
+          $ref: "../../openapi.yaml#/components/schemas/ErrorConflict"
+        examples:
+          personNumberConflict:
+            $ref: "../../openapi.yaml#/components/examples/ErrorConflict_PersonNumber"
+          emailConflict:
+            $ref: "../../openapi.yaml#/components/examples/ErrorConflict_Email"
+  "500":
+    description: Failed to update student
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]

@@ -1,0 +1,76 @@
+summary: Delete a student
+description: Deletes a student - requires Admin role (bearer token).
+tags: [Admins, Students]
+security:
+  - bearerAuth: []
+parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      type: string
+responses:
+  "200":
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            user:
+              $ref: "../../openapi.yaml#/components/schemas/User"
+          required: [message, user]
+  "400":
+    description: Invalid ID format
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+            details:
+              type: object
+          required: [details, error]
+  "401":
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "404":
+    description: No student found with the provided ID
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
+  "500":
+    description: Failed to delete student
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+          required: [error]
