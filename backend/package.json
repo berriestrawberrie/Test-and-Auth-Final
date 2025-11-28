@@ -12,7 +12,7 @@
     "openapi:bundle": "npx @redocly/openapi-cli bundle docs/openapi.yaml -o docs/bundled.yaml 2>/dev/null",
     "openapi:validate": "npx @redocly/openapi-cli validate docs/bundled.yaml",
     "openapi:gen": "npm run openapi:bundle && npm run openapi:validate",
-    "dev": "NODE_ENV=development nodemon --watch docs --ext yaml,yml --exec tsx index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon --watch docs --ext yaml,yml --exec tsx index.ts",
     "lint": "eslint"
   },
   "prisma": {
@@ -45,6 +45,7 @@
     "@types/yamljs": "^0.2.34",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
+    "cross-env": "^10.1.0",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",
