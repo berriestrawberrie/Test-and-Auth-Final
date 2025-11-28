@@ -13,7 +13,7 @@ const studentData = {
   password: "password123",
 };
 
-describe("POST /admins/register", () => {
+describe("POST /admins/students", () => {
   beforeEach(async () => {
     await clearTestData();
   });
@@ -21,7 +21,7 @@ describe("POST /admins/register", () => {
   //@ SUCCESS TESTS
   it("should register a student with valid data", async () => {
     const response = await request(app)
-      .post("/admins/register")
+      .post("/admins/students")
       .set("Authorization", `Bearer ${mockAdminToken}`)
       .send(studentData);
 
@@ -43,7 +43,7 @@ describe("POST /admins/register", () => {
     };
 
     const response = await request(app)
-      .post("/admins/register")
+      .post("/admins/students")
       .set("Authorization", `Bearer ${mockAdminToken}`)
       .send(invalidData);
 
@@ -64,7 +64,7 @@ describe("POST /admins/register", () => {
     };
 
     const response = await request(app)
-      .post("/admins/register")
+      .post("/admins/students")
       .set("Authorization", `Bearer ${mockAdminToken}`)
       .send(invalidData);
 
@@ -84,7 +84,7 @@ describe("POST /admins/register", () => {
     };
 
     const response = await request(app)
-      .post("/admins/register")
+      .post("/admins/students")
       .set("Authorization", `Bearer ${mockAdminToken}`)
       .send(invalidData);
 
@@ -98,7 +98,7 @@ describe("POST /admins/register", () => {
 
     // Try to create again
     const response = await request(app)
-      .post("/admins/register")
+      .post("/admins/students")
       .set("Authorization", `Bearer ${mockAdminToken}`)
       .send(studentData);
 
@@ -108,14 +108,14 @@ describe("POST /admins/register", () => {
 
   //@ AUTHENTICATION TESTS
   it("should return 401 without token", async () => {
-    const response = await request(app).post("/admins/register").send(studentData);
+    const response = await request(app).post("/admins/students").send(studentData);
     expect(response.status).toBe(401);
   });
 
   it("should return 403 with student token", async () => {
     const student = await createStudent();
     const response = await request(app)
-      .post("/admins/register")
+      .post("/admins/students")
       .set("Authorization", `Bearer student-${student.id}`)
       .send(studentData);
 
