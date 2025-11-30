@@ -1,14 +1,14 @@
 .registration-form {
     position: relative;
     display: grid;
-    place-self: center;
+    justify-self: center;
+    align-self: start;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: 800px;
-    width: 100%;
     column-gap: var(--spacing-xl);
     row-gap: var(--spacing-s);
     background-color: var(--main-200);
     padding: var(--spacing-xxxxl);
+    width: 100%;
 }
 
 .registration-form__inner-wrapper {

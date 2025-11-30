@@ -1,13 +1,29 @@
 .header {
   padding-block: var(--spacing-m);
-  display: flex;
-  justify-content: end;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.header__back-button {
+  display: grid;
+  place-items: center;
+  grid-column: 1/2;
+  justify-self: start;
+  font-size: var(--font-size-l);
+  background-color: var(--main-300);
+  padding-inline: 1rem;
+  border: var(--border);
+  border-radius: 8px;
+  color: var(--black);
+  text-decoration: none;
 }
 
 .header__logout-button {
+  grid-column: 2/3;
   display: grid;
   grid-template-columns: auto 1fr;
   place-items: center;
+  justify-self: end;
   background-color: var(--main-300);
   border: var(--border);
   border-radius: 10px;
@@ -21,7 +37,9 @@
 }
 
 @media (pointer: fine) {
-  .header__logout-button:hover {
+
+  .header__logout-button:hover,
+  .header__back-button:hover {
     cursor: pointer;
     background-color: var(--accent2);
   }

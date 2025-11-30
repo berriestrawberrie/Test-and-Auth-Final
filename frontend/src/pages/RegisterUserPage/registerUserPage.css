@@ -1,0 +1,12 @@
+ .registration-page {
+     display: grid;
+     justify-self: center;
+     max-width: 800px;
+     width: 100%;
+     grid-template-rows: auto 1fr;
+     gap: 1rem;
+ }
+
+ .registration-page__title {
+     justify-self: start;
+ }

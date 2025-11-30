@@ -1,6 +1,6 @@
 import useUserStore from "../../stores/usersStore";
 import "./header.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase/firebase.init";
 
@@ -10,6 +10,7 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isOnLandingPage = location.pathname === "/";
+  const isBackButtonShowing = location.pathname !== "/admins" && user?.role === "ADMIN";
 
   const handleLogout = async () => {
     try {
@@ -23,6 +24,11 @@ const Header: React.FC = () => {
 
   return (
     <header className="header">
+      {isBackButtonShowing && (
+        <Link to="/admins" className="header__back-button">
+          &lsaquo; BACK
+        </Link>
+      )}
       {!isOnLandingPage && user && (
         <button className="header__logout-button" onClick={handleLogout}>
           <img

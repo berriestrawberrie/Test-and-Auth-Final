@@ -67,6 +67,7 @@ h6 {
 .wrapper {
   position: relative;
   display: grid;
+  row-gap: var(--spacing-xxxxl);
   grid-template-rows: auto 1fr;
   min-height: 100dvh;
   max-width: var(--max-width);

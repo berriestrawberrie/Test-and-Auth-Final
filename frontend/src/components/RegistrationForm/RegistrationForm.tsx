@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { AxiosError } from "axios";
 import { registerStudent } from "../../api/handlers/admins/adminHandler";
+import z from "zod";
 
 const FORM_INITIAL_STATE = {
   firstname: "",
@@ -45,7 +46,7 @@ const RegistrationForm = () => {
     setIsLoading(true);
     setError("");
     try {
-      const registeredStudent = await registerStudent({
+      await registerStudent({
         firstName: formData.firstname,
         lastName: formData.lastname,
         personNumber: formData.personnumber,
@@ -54,7 +55,6 @@ const RegistrationForm = () => {
         email: formData.email,
         password: formData.password,
       });
-      console.log(registeredStudent);
 
       setFormData(FORM_INITIAL_STATE);
       navigate("/admins");
@@ -75,6 +75,8 @@ const RegistrationForm = () => {
         } else {
           setError("Registration failed. Please try again.");
         }
+      } else if (error instanceof z.ZodError) {
+        setError(error.issues.map((issue) => issue.message).join(", "));
       } else {
         setError("Registration failed. Please try again.");
       }
