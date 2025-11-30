@@ -79,19 +79,23 @@ grading-application/
    npm install
    ```
 
-3. Configure environment variables in `.env`:
+3. Configure environment variables in:
 
-   ```env
-   # URL for your postgresql db.
+   `.env:`
+
+   ```bash
+     # URL for your postgresql db.
    DATABASE_URL="postgresql://user:password@localhost:5432/grading_app"
-   # Filepath to your firebase service account key information.
+     # Filepath to your firebase service account key information.
    GOOGLE_APPLICATION_CREDENTIALS="./firebaseServiceAccountKey.json"
    ```
 
-   ```env.test
-   # URL for your postgresql TEST db.
+   `env.test:`
+
+   ```bash
+      # URL for your postgresql TEST db.
    DATABASE_URL="postgresql://user:password@localhost:5432/grading_app"
-   # Filepath to your firebase service account key information.
+      # Filepath to your firebase service account key information.
    GOOGLE_APPLICATION_CREDENTIALS="./firebaseServiceAccountKey.json"
    ```
 
@@ -169,11 +173,91 @@ grading-application/
 
 ---
 
+## 📖 API Documentation (Swagger/OpenAPI)
+
+- **Live Docs:**  
+  When running the backend in development mode, interactive API documentation is available at [http://localhost:3000/docs/](http://localhost:3000/docs/).
+
+  - View all endpoints, request/response schemas, authentication requirements, and try out requests directly from the browser (using mock or real tokens).
+
+- **Specification Files:**
+
+  - All OpenAPI YAML files are located in `backend/docs/`:
+    - `openapi.yaml`: Main OpenAPI specification.
+    - `paths/`: Operation-specific YAML files, organized by resource.
+    - `bundled.yaml`: Generated, fully-resolved OpenAPI spec (created by bundling).
+
+- **Editing & Bundling:**
+
+  - Edit endpoint documentation in the relevant YAML files under `docs/paths/`.
+  - Bundle and validate the spec using [Redocly OpenAPI CLI](https://github.com/Redocly/openapi-cli):
+
+    ```bash
+    # Bundle the OpenAPI spec (resolves all $refs)
+    npm run openapi:bundle
+
+    # Validate the bundled spec for errors/warnings
+    npm run openapi:validate
+
+    # Bundle and validate in one step
+    npm run openapi:gen
+    ```
+
+  - The backend serves the bundled spec if present, otherwise falls back to the source spec.
+
+- **Authentication:**
+
+  - Most endpoints require a Bearer token (JWT or dev token) for authorization.
+  - Admin-only endpoints are marked in the docs and require admin privileges.
+
+- **Best Practices:**
+  - Keep documentation up to date with code changes.
+  - Use the Swagger UI to explore, test, and verify API behavior during development.
+  - Do not use destructive endpoints (e.g., DELETE) against production data from Swagger UI.
+
+---
+
 ## 🧪 Testing
 
-- **Backend**: Uses Jest + Supertest for API tests.
+### Backend
 
-  Can add additional testing information here.
+- **Test Frameworks:**  
+  Uses [Jest](https://jestjs.io/) for unit and integration tests, and [Supertest](https://github.com/ladjs/supertest) for HTTP endpoint testing.
+
+- **Test Structure:**
+
+  - All tests are located in `backend/tests/`.
+  - **integrationTests/**: Organized by resource (`admins/`, `students/`, `users/`). Each file tests API endpoints and real DB interactions.
+  - **mocks/**: Contains mock implementations (e.g., `firebaseMock.ts`) for external dependencies.
+  - **helpers.ts**, **setup.ts**, **setupEnv.ts**, **testClient.ts**: Utility files for test setup, environment configuration, and reusable test clients.
+
+- **Environment:**
+
+  - Tests run against a dedicated test database (`.env.test`).
+  - Database migrations and seeding for tests:
+    ```bash
+    npm run test:migrate   # Deploys migrations to test DB
+    npm run test:seed      # Seeds test DB with sample data
+    npm run test:studio    # Opens Prisma Studio for test DB
+    ```
+  - Test scripts use `cross-env` for cross-platform compatibility.
+
+- **Running Tests:**
+
+  - Run all tests:
+    ```bash
+    npm test
+    ```
+  - Watch mode (auto-re-run on changes):
+    ```bash
+    npm run test:watch
+    ```
+  - Test output includes coverage, pass/fail status, and error details.
+
+- **Best Practices:**
+  - Use mock tokens (e.g., `dev-<uid>`) for authentication in tests.
+  - Integration tests seed and clean up the database to ensure repeatable results.
+  - Unit tests mock external dependencies (e.g., Prisma, Firebase) for isolated logic testing.
 
 ---
 
