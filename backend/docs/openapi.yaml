@@ -145,7 +145,7 @@ components:
 paths:
   /users/login:
     post:
-      $ref: "./paths/user/login-user.yml"
+      $ref: "./paths/users/login-user.yml"
   /students/{id}:
     get:
       $ref: "./paths/students/get-student-by-id.yaml"
